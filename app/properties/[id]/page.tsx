@@ -4,76 +4,93 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import DocumentUpload from '@/app/components/DocumentUpload'
-import DocumentsList from '@/app/components/DocumentsList'
 
-export default function PropertyDetailPage({ params }: { params: { id: string } }) {
+export default function EditPropertyPage({ params }: { params: { id: string } }) {
   const router = useRouter()
   const supabase = createClient()
-  const [property, setProperty] = useState<any>(null)
-  const [projects, setProjects] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState('overview')
-  const [refreshDocuments, setRefreshDocuments] = useState(0)
+  const [saving, setSaving] = useState(false)
+  const [formData, setFormData] = useState({
+    name: '',
+    address: '',
+    city: '',
+    postal_code: '',
+    property_type: 'apartment',
+    size_sqm: '',
+    purchase_price: '',
+    current_value: '',
+    description: ''
+  })
 
   useEffect(() => {
-    fetchPropertyDetails()
-  }, [params.id])
+    async function fetchProperty() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        router.push('/login')
+        return
+      }
 
-  async function fetchPropertyDetails() {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      router.push('/login')
-      return
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*')
+        .eq('id', params.id)
+        .single()
+
+      if (error || !data) {
+        router.push('/dashboard')
+        return
+      }
+
+      setFormData({
+        name: data.name || '',
+        address: data.address || '',
+        city: data.city || '',
+        postal_code: data.postal_code || '',
+        property_type: data.property_type || 'apartment',
+        size_sqm: data.size_sqm?.toString() || '',
+        purchase_price: data.purchase_price?.toString() || '',
+        current_value: data.current_value?.toString() || '',
+        description: data.description || ''
+      })
+      setLoading(false)
     }
 
-    // Fetch property
-    const { data: propertyData, error: propertyError } = await supabase
-      .from('properties')
-      .select('*')
-      .eq('id', params.id)
-      .single()
+    fetchProperty()
+  }, [params.id, router, supabase])
 
-    if (propertyError || !propertyData) {
-      router.push('/dashboard')
-      return
-    }
-
-    setProperty(propertyData)
-
-    // Fetch projects
-    const { data: projectsData } = await supabase
-      .from('projects')
-      .select('*')
-      .eq('property_id', params.id)
-      .order('created_at', { ascending: false })
-
-    setProjects(projectsData || [])
-    setLoading(false)
-  }
-
-  async function handleDeleteProperty() {
-    if (!confirm('Are you sure you want to delete this property? This action cannot be undone.')) {
-      return
-    }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSaving(true)
 
     const { error } = await supabase
       .from('properties')
-      .delete()
+      .update({
+        name: formData.name,
+        address: formData.address,
+        city: formData.city,
+        postal_code: formData.postal_code,
+        property_type: formData.property_type,
+        size_sqm: formData.size_sqm ? parseFloat(formData.size_sqm) : null,
+        purchase_price: formData.purchase_price ? parseFloat(formData.purchase_price) : null,
+        current_value: formData.current_value ? parseFloat(formData.current_value) : null,
+        description: formData.description,
+        updated_at: new Date().toISOString()
+      })
       .eq('id', params.id)
 
     if (error) {
-      alert('Error deleting property: ' + error.message)
+      alert('Error updating property: ' + error.message)
+      setSaving(false)
     } else {
-      router.push('/dashboard')
+      router.push(`/properties/${params.id}`)
     }
   }
 
-  function calculateROI() {
-    if (!property?.purchase_price) return 'N/A'
-    const currentValue = property.current_value || property.purchase_price
-    const roi = ((currentValue - property.purchase_price) / property.purchase_price) * 100
-    return roi.toFixed(2) + '%'
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
   }
 
   if (loading) {
@@ -81,200 +98,158 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-4">
-              <Link href="/dashboard" className="text-gray-500 hover:text-gray-700">
-                ← Back
-              </Link>
-              <h1 className="text-2xl font-bold text-gray-900">{property.name}</h1>
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-3xl mx-auto px-4">
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">Edit Property</h1>
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Property Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                required
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              />
             </div>
-            <div className="flex space-x-2">
-              <Link
-                href={`/properties/${params.id}/edit`}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Edit Property
-              </Link>
-              <button
-                onClick={handleDeleteProperty}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Delete Property
-              </button>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Address
+              </label>
+              <input
+                type="text"
+                name="address"
+                required
+                value={formData.address}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              />
             </div>
-          </div>
-        </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Property Info Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500">Purchase Price</h3>
-            <p className="text-2xl font-bold text-gray-900">
-              €{property.purchase_price?.toLocaleString() || 'N/A'}
-            </p>
-          </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500">Current Value</h3>
-            <p className="text-2xl font-bold text-gray-900">
-              €{(property.current_value || property.purchase_price)?.toLocaleString() || 'N/A'}
-            </p>
-          </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500">ROI</h3>
-            <p className="text-2xl font-bold text-gray-900">{calculateROI()}</p>
-          </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500">Active Projects</h3>
-            <p className="text-2xl font-bold text-gray-900">{projects.length}</p>
-          </div>
-        </div>
-
-        {/* Tabs */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="border-b border-gray-200">
-            <nav className="-mb-px flex">
-              <button
-                onClick={() => setActiveTab('overview')}
-                className={`py-2 px-4 border-b-2 font-medium text-sm ${
-                  activeTab === 'overview'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Overview
-              </button>
-              <button
-                onClick={() => setActiveTab('projects')}
-                className={`py-2 px-4 border-b-2 font-medium text-sm ${
-                  activeTab === 'projects'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Projects ({projects.length})
-              </button>
-              <button
-                onClick={() => setActiveTab('documents')}
-                className={`py-2 px-4 border-b-2 font-medium text-sm ${
-                  activeTab === 'documents'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Documents
-              </button>
-            </nav>
-          </div>
-
-          <div className="p-6">
-            {/* Overview Tab */}
-            {activeTab === 'overview' && (
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Property Details</h3>
-                    <dl className="space-y-3">
-                      <div className="flex justify-between">
-                        <dt className="text-sm text-gray-500">Type</dt>
-                        <dd className="text-sm text-gray-900 capitalize">{property.property_type}</dd>
-                      </div>
-                      <div className="flex justify-between">
-                        <dt className="text-sm text-gray-500">Size</dt>
-                        <dd className="text-sm text-gray-900">{property.size_sqm ? `${property.size_sqm} m²` : 'N/A'}</dd>
-                      </div>
-                      <div className="flex justify-between">
-                        <dt className="text-sm text-gray-500">Address</dt>
-                        <dd className="text-sm text-gray-900">{property.address}</dd>
-                      </div>
-                      <div className="flex justify-between">
-                        <dt className="text-sm text-gray-500">City</dt>
-                        <dd className="text-sm text-gray-900">{property.city}</dd>
-                      </div>
-                      <div className="flex justify-between">
-                        <dt className="text-sm text-gray-500">Postal Code</dt>
-                        <dd className="text-sm text-gray-900">{property.postal_code || 'N/A'}</dd>
-                      </div>
-                    </dl>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Description</h3>
-                    <p className="text-sm text-gray-600">
-                      {property.description || 'No description provided.'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Projects Tab */}
-            {activeTab === 'projects' && (
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <div className="mb-4">
-                  <Link
-                    href={`/properties/${params.id}/projects/new`}
-                    className="inline-block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                  >
-                    + New Project
-                  </Link>
-                </div>
-                {projects.length === 0 ? (
-                  <p className="text-gray-500 text-center py-8">No projects yet. Create your first project!</p>
-                ) : (
-                  <div className="space-y-4">
-                    {projects.map((project) => (
-                      <div key={project.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <h4 className="font-medium text-gray-900">{project.name}</h4>
-                            <p className="text-sm text-gray-500 mt-1">{project.description}</p>
-                            <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
-                              <span>Status: <span className="capitalize">{project.status}</span></span>
-                              <span>Budget: €{project.budget?.toLocaleString() || 'N/A'}</span>
-                            </div>
-                          </div>
-                          <Link
-                            href={`/projects/${project.id}`}
-                            className="text-blue-500 hover:text-blue-700 text-sm"
-                          >
-                            View Details →
-                          </Link>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  City
+                </label>
+                <input
+                  type="text"
+                  name="city"
+                  required
+                  value={formData.city}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                />
               </div>
-            )}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Postal Code
+                </label>
+                <input
+                  type="text"
+                  name="postal_code"
+                  value={formData.postal_code}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+            </div>
 
-            {/* Documents Tab */}
-            {activeTab === 'documents' && (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Upload Document</h3>
-                  <DocumentUpload
-                    propertyId={params.id}
-                    onUploadComplete={() => setRefreshDocuments(prev => prev + 1)}
-                  />
-                </div>
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Documents</h3>
-                  <DocumentsList
-                    propertyId={params.id}
-                    refreshTrigger={refreshDocuments}
-                  />
-                </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Property Type
+                </label>
+                <select
+                  name="property_type"
+                  value={formData.property_type}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                >
+                  <option value="apartment">Apartment</option>
+                  <option value="house">House</option>
+                  <option value="commercial">Commercial</option>
+                  <option value="land">Land</option>
+                </select>
               </div>
-            )}
-          </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Size (m²)
+                </label>
+                <input
+                  type="number"
+                  name="size_sqm"
+                  value={formData.size_sqm}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Purchase Price (€)
+                </label>
+                <input
+                  type="number"
+                  name="purchase_price"
+                  value={formData.purchase_price}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Current Value (€)
+                </label>
+                <input
+                  type="number"
+                  name="current_value"
+                  value={formData.current_value}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Leave empty to use purchase price"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Description
+              </label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+
+            <div className="flex justify-between">
+              <Link
+                href={`/properties/${params.id}`}
+                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Cancel
+              </Link>
+              <button
+                type="submit"
+                disabled={saving}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
+              >
+                {saving ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </form>
         </div>
-      </main>
+      </div>
     </div>
   )
 }
