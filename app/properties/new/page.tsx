@@ -73,7 +73,7 @@ export default function NewPropertyPage() {
                 value={formData.name}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="e.g., Paris Apartment"
+                placeholder="e.g., Milano Centro Apartment"
               />
             </div>
 
@@ -88,7 +88,7 @@ export default function NewPropertyPage() {
                 value={formData.address}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="123 Rue de Rivoli"
+                placeholder="Via Montenapoleone 15"
               />
             </div>
 
@@ -104,12 +104,12 @@ export default function NewPropertyPage() {
                   value={formData.city}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Paris"
+                  placeholder="Milano"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Postal Code
+                  CAP (Postal Code)
                 </label>
                 <input
                   type="text"
@@ -117,7 +117,7 @@ export default function NewPropertyPage() {
                   value={formData.postal_code}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="75001"
+                  placeholder="20121"
                 />
               </div>
             </div>
@@ -133,10 +133,10 @@ export default function NewPropertyPage() {
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 >
-                  <option value="apartment">Apartment</option>
-                  <option value="house">House</option>
-                  <option value="commercial">Commercial</option>
-                  <option value="land">Land</option>
+                  <option value="apartment">Appartamento</option>
+                  <option value="house">Casa/Villa</option>
+                  <option value="commercial">Commerciale</option>
+                  <option value="land">Terreno</option>
                 </select>
               </div>
               <div>
@@ -149,7 +149,7 @@ export default function NewPropertyPage() {
                   value={formData.size_sqm}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="75"
+                  placeholder="85"
                 />
               </div>
             </div>
@@ -164,7 +164,7 @@ export default function NewPropertyPage() {
                 value={formData.purchase_price}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="250000"
+                placeholder="350000"
               />
             </div>
 
