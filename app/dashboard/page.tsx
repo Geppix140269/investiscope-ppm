@@ -13,32 +13,32 @@ export default function DashboardPage() {
   const supabase = createClient()
 
   useEffect(() => {
-    async function checkUser() {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        router.push('/login')
-      } else {
-        setUser(user)
-        fetchProperties()
-      }
-    }
-
-    async function fetchProperties() {
-      const { data, error } = await supabase
-        .from('properties')
-        .select('*')
-        .order('created_at', { ascending: false })
-
-      if (error) {
-        console.error('Error fetching properties:', error)
-      } else {
-        setProperties(data || [])
-      }
-      setLoading(false)
-    }
-
     checkUser()
-  }, [router, supabase])
+  }, [])
+
+  async function checkUser() {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      router.push('/login')
+    } else {
+      setUser(user)
+      fetchProperties()
+    }
+  }
+
+  async function fetchProperties() {
+    const { data, error } = await supabase
+      .from('properties')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      console.error('Error fetching properties:', error)
+    } else {
+      setProperties(data || [])
+    }
+    setLoading(false)
+  }
 
   async function signOut() {
     await supabase.auth.signOut()
@@ -53,8 +53,18 @@ export default function DashboardPage() {
     return properties.reduce((sum, property) => sum + (property.current_value || property.purchase_price || 0), 0)
   }
 
+  function formatPropertyType(type: string) {
+    const types: { [key: string]: string } = {
+      'apartment': 'Appartamento',
+      'house': 'Casa/Villa',
+      'commercial': 'Commerciale',
+      'land': 'Terreno'
+    }
+    return types[type] || type
+  }
+
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>
+    return <div className="min-h-screen flex items-center justify-center">Caricamento...</div>
   }
 
   return (
@@ -63,14 +73,17 @@ export default function DashboardPage() {
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <h1 className="text-3xl font-bold text-gray-900">InvestiScope PPM</h1>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">InvestiScope Italia</h1>
+              <p className="text-sm text-gray-600">Gestione Proprietà Immobiliari in Italia</p>
+            </div>
             <div className="flex items-center space-x-4">
               <span className="text-gray-700">{user?.email}</span>
               <button
                 onClick={signOut}
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               >
-                Sign Out
+                Esci
               </button>
             </div>
           </div>
@@ -80,14 +93,14 @@ export default function DashboardPage() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Your Properties</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Le Tue Proprietà in Italia</h2>
           
           {/* Add Property Button */}
           <Link 
             href="/properties/new"
             className="inline-block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-6"
           >
-            + Add New Property
+            + Aggiungi Nuova Proprietà
           </Link>
 
           {/* Properties Grid */}
@@ -97,23 +110,34 @@ export default function DashboardPage() {
                 <div key={property.id} className="bg-white rounded-lg shadow-md p-6">
                   <h3 className="text-lg font-semibold mb-2">{property.name}</h3>
                   <p className="text-gray-600 mb-2">{property.address}</p>
-                  <p className="text-gray-600 mb-4">{property.city} {property.postal_code}</p>
+                  <p className="text-gray-600 mb-4">
+                    {property.city} {property.postal_code && `${property.postal_code}`}
+                    <span className="text-xs text-gray-500 ml-2">Italia</span>
+                  </p>
                   
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Type:</span>
-                      <span className="capitalize">{property.property_type}</span>
+                      <span className="text-gray-500">Tipologia:</span>
+                      <span className="capitalize">{formatPropertyType(property.property_type)}</span>
                     </div>
                     {property.size_sqm && (
                       <div className="flex justify-between">
-                        <span className="text-gray-500">Size:</span>
+                        <span className="text-gray-500">Superficie:</span>
                         <span>{property.size_sqm} m²</span>
                       </div>
                     )}
                     {property.purchase_price && (
                       <div className="flex justify-between">
-                        <span className="text-gray-500">Purchase Price:</span>
-                        <span className="font-semibold">€{property.purchase_price.toLocaleString()}</span>
+                        <span className="text-gray-500">Prezzo Acquisto:</span>
+                        <span className="font-semibold">€{property.purchase_price.toLocaleString('it-IT')}</span>
+                      </div>
+                    )}
+                    {property.energy_class && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Classe Energetica:</span>
+                        <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs">
+                          {property.energy_class}
+                        </span>
                       </div>
                     )}
                   </div>
@@ -123,14 +147,14 @@ export default function DashboardPage() {
                       href={`/properties/${property.id}`}
                       className="text-blue-500 hover:text-blue-700 text-sm font-medium"
                     >
-                      View Details →
+                      Vedi Dettagli →
                     </Link>
                   </div>
                 </div>
               ))
             ) : (
               <div className="col-span-full text-center py-12 text-gray-500">
-                <p>No properties added yet. Click &apos;Add New Property&apos; to get started!</p>
+                <p>Nessuna proprietà aggiunta. Clicca "Aggiungi Nuova Proprietà" per iniziare!</p>
               </div>
             )}
           </div>
@@ -139,20 +163,39 @@ export default function DashboardPage() {
         {/* Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500">Total Properties</h3>
+            <h3 className="text-sm font-medium text-gray-500">Totale Proprietà</h3>
             <p className="text-2xl font-bold text-gray-900">{properties.length}</p>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500">Active Projects</h3>
+            <h3 className="text-sm font-medium text-gray-500">Progetti Attivi</h3>
             <p className="text-2xl font-bold text-gray-900">0</p>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500">Total Investment</h3>
-            <p className="text-2xl font-bold text-gray-900">€{calculateTotalInvestment().toLocaleString()}</p>
+            <h3 className="text-sm font-medium text-gray-500">Investimento Totale</h3>
+            <p className="text-2xl font-bold text-gray-900">€{calculateTotalInvestment().toLocaleString('it-IT')}</p>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500">Portfolio Value</h3>
-            <p className="text-2xl font-bold text-gray-900">€{calculateTotalValue().toLocaleString()}</p>
+            <h3 className="text-sm font-medium text-gray-500">Valore Portfolio</h3>
+            <p className="text-2xl font-bold text-gray-900">€{calculateTotalValue().toLocaleString('it-IT')}</p>
+          </div>
+        </div>
+
+        {/* Quick Links for Italian Property Management */}
+        <div className="mt-8 bg-blue-50 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Risorse Utili per Investitori</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-white rounded p-4">
+              <h4 className="font-medium mb-2">📋 Documenti Necessari</h4>
+              <p className="text-sm text-gray-600">Checklist completa per l'acquisto immobiliare in Italia</p>
+            </div>
+            <div className="bg-white rounded p-4">
+              <h4 className="font-medium mb-2">🏛️ Permessi e Pratiche</h4>
+              <p className="text-sm text-gray-600">Gestione SCIA, CILA, e Permessi di Costruire</p>
+            </div>
+            <div className="bg-white rounded p-4">
+              <h4 className="font-medium mb-2">👥 Professionisti</h4>
+              <p className="text-sm text-gray-600">Geometri, Notai, e Imprese nella tua zona</p>
+            </div>
           </div>
         </div>
       </main>
