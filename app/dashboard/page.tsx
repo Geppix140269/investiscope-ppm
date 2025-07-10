@@ -130,7 +130,7 @@ export default function DashboardPage() {
               ))
             ) : (
               <div className="col-span-full text-center py-12 text-gray-500">
-                <p>No properties added yet. Click "Add New Property" to get started!</p>
+                <p>No properties added yet. Click &quot;Add New Property&quot; to get started!</p>
               </div>
             )}
           </div>
