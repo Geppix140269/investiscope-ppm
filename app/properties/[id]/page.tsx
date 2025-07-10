@@ -4,12 +4,15 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import DocumentUpload from '@/components/DocumentUpload'
+import DocumentsList from '@/components/DocumentsList'
 
 export default function PropertyDetailsPage({ params }: { params: { id: string } }) {
   const [property, setProperty] = useState<any>(null)
   const [projects, setProjects] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [showAddProject, setShowAddProject] = useState(false)
+  const [documentsRefresh, setDocumentsRefresh] = useState(0)
   const [projectForm, setProjectForm] = useState({
     name: '',
     description: '',
@@ -262,6 +265,23 @@ export default function PropertyDetailsPage({ params }: { params: { id: string }
               No projects yet. Click "Add Project" to create your first project for this property.
             </p>
           )}
+        </div>
+
+        {/* Documents Section */}
+        <div className="bg-white rounded-lg shadow-md p-6 mt-8">
+          <h2 className="text-xl font-semibold mb-6">Documents</h2>
+          
+          <div className="mb-6">
+            <DocumentUpload 
+              propertyId={params.id}
+              onUploadComplete={() => setDocumentsRefresh(prev => prev + 1)}
+            />
+          </div>
+          
+          <DocumentsList 
+            propertyId={params.id}
+            refreshTrigger={documentsRefresh}
+          />
         </div>
       </main>
     </div>
