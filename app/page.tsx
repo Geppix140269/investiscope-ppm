@@ -1,56 +1,24 @@
+import Link from 'next/link'
+
 export default function Home() {
   return (
-    <main style={{
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '2rem'
-    }}>
-      <div style={{ textAlign: 'center' }}>
-        <h1 style={{ 
-          fontSize: '3rem', 
-          fontWeight: 'bold',
-          marginBottom: '1rem',
-          color: '#333'
-        }}>
-          InvestiScope PPM
-        </h1>
-        <p style={{ 
-          fontSize: '1.5rem',
-          color: '#666',
-          marginBottom: '2rem'
-        }}>
-          Property Project Management System
-        </p>
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <a 
+    <main className="flex min-h-screen flex-col items-center justify-center p-24">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold mb-4">InvestiScope PPM</h1>
+        <p className="text-xl text-gray-600 mb-8">Property Project Management System</p>
+        <div className="space-x-4">
+          <Link 
             href="/login" 
-            style={{
-              backgroundColor: '#3b82f6',
-              color: 'white',
-              padding: '0.75rem 1.5rem',
-              borderRadius: '0.375rem',
-              fontWeight: 'bold',
-              display: 'inline-block'
-            }}
+            className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             Login
-          </a>
-          <a 
+          </Link>
+          <Link 
             href="/register" 
-            style={{
-              backgroundColor: '#10b981',
-              color: 'white',
-              padding: '0.75rem 1.5rem',
-              borderRadius: '0.375rem',
-              fontWeight: 'bold',
-              display: 'inline-block'
-            }}
+            className="inline-block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
           >
             Register
-          </a>
+          </Link>
         </div>
       </div>
     </main>
