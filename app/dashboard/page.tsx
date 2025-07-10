@@ -13,32 +13,32 @@ export default function DashboardPage() {
   const supabase = createClient()
 
   useEffect(() => {
+    async function checkUser() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        router.push('/login')
+      } else {
+        setUser(user)
+        fetchProperties()
+      }
+    }
+
+    async function fetchProperties() {
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        console.error('Error fetching properties:', error)
+      } else {
+        setProperties(data || [])
+      }
+      setLoading(false)
+    }
+
     checkUser()
-  }, [])
-
-  async function checkUser() {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      router.push('/login')
-    } else {
-      setUser(user)
-      fetchProperties()
-    }
-  }
-
-  async function fetchProperties() {
-    const { data, error } = await supabase
-      .from('properties')
-      .select('*')
-      .order('created_at', { ascending: false })
-
-    if (error) {
-      console.error('Error fetching properties:', error)
-    } else {
-      setProperties(data || [])
-    }
-    setLoading(false)
-  }
+  }, [router, supabase])
 
   async function signOut() {
     await supabase.auth.signOut()
@@ -130,7 +130,7 @@ export default function DashboardPage() {
               ))
             ) : (
               <div className="col-span-full text-center py-12 text-gray-500">
-                <p>No properties added yet. Click &quot;Add New Property&quot; to get started!</p>
+                <p>No properties added yet. Click &apos;Add New Property&apos; to get started!</p>
               </div>
             )}
           </div>
