@@ -97,7 +97,9 @@ export default function DocumentsList({ propertyId, projectId, refreshTrigger }:
     return (bytes / 1024 / 1024).toFixed(1) + ' MB'
   }
 
-  if (loading) return <div>Loading documents...</div>
+  if (loading) {
+    return <div>Loading documents...</div>
+  }
 
   if (documents.length === 0) {
     return <p className="text-gray-500 text-center py-4">No documents uploaded yet.</p>
