@@ -11,10 +11,6 @@ export default function DashboardPage() {
   const router = useRouter()
   const supabase = createClient()
 
-  useEffect(() => {
-    checkUser()
-  }, [])
-
   async function checkUser() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
@@ -24,6 +20,10 @@ export default function DashboardPage() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    checkUser()
+  }, [checkUser])
 
   async function signOut() {
     await supabase.auth.signOut()
@@ -80,7 +80,7 @@ export default function DashboardPage() {
 
             {/* Empty State */}
             <div className="col-span-full text-center py-12 text-gray-500">
-              <p>No properties added yet. Click "Add New Property" to get started!</p>
+              <p>No properties added yet. Click &quot;Add New Property&quot; to get started!</p>
             </div>
           </div>
         </div>
