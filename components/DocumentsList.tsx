@@ -106,7 +106,7 @@ export default function DocumentsList({ propertyId, projectId, refreshTrigger }:
               View
             </a>
             <button
-              onClick={() => handleDelete(doc.id, doc.file_url.split('/').pop())}
+              onClick={() => handleDelete(doc.id, doc.file_url.split('/').pop() || '')}
               className="text-red-500 hover:text-red-700 text-sm"
             >
               Delete
