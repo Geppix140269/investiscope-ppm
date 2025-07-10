@@ -15,29 +15,29 @@ export default function DocumentsList({ propertyId, projectId, refreshTrigger }:
   const supabase = createClient()
 
   useEffect(() => {
+    async function fetchDocuments() {
+      let query = supabase
+        .from('documents')
+        .select('*')
+        .eq('property_id', propertyId)
+        .order('created_at', { ascending: false })
+
+      if (projectId) {
+        query = query.eq('project_id', projectId)
+      }
+
+      const { data, error } = await query
+
+      if (error) {
+        console.error('Error fetching documents:', error)
+      } else {
+        setDocuments(data || [])
+      }
+      setLoading(false)
+    }
+
     fetchDocuments()
-  }, [propertyId, projectId, refreshTrigger])
-
-  async function fetchDocuments() {
-    let query = supabase
-      .from('documents')
-      .select('*')
-      .eq('property_id', propertyId)
-      .order('created_at', { ascending: false })
-
-    if (projectId) {
-      query = query.eq('project_id', projectId)
-    }
-
-    const { data, error } = await query
-
-    if (error) {
-      console.error('Error fetching documents:', error)
-    } else {
-      setDocuments(data || [])
-    }
-    setLoading(false)
-  }
+  }, [propertyId, projectId, refreshTrigger, supabase])
 
   async function handleDelete(documentId: string, fileName: string) {
     if (!confirm('Are you sure you want to delete this document?')) return
@@ -57,7 +57,27 @@ export default function DocumentsList({ propertyId, projectId, refreshTrigger }:
       if (error) throw error
 
       // Refresh list
-      fetchDocuments()
+      const fetchDocuments = async () => {
+        let query = supabase
+          .from('documents')
+          .select('*')
+          .eq('property_id', propertyId)
+          .order('created_at', { ascending: false })
+
+        if (projectId) {
+          query = query.eq('project_id', projectId)
+        }
+
+        const { data, error } = await query
+
+        if (error) {
+          console.error('Error fetching documents:', error)
+        } else {
+          setDocuments(data || [])
+        }
+      }
+      
+      await fetchDocuments()
     } catch (error: any) {
       alert('Error deleting document: ' + error.message)
     }
@@ -97,7 +117,7 @@ export default function DocumentsList({ propertyId, projectId, refreshTrigger }:
             </div>
           </div>
           <div className="flex space-x-2">
-            <a
+            
               href={doc.file_url}
               target="_blank"
               rel="noopener noreferrer"
@@ -106,7 +126,12 @@ export default function DocumentsList({ propertyId, projectId, refreshTrigger }:
               View
             </a>
             <button
-              onClick={() => handleDelete(doc.id, doc.file_url.split('/').pop() || '')}
+              onClick={() => {
+                const fileName = doc.file_url.split('/').pop()
+                if (fileName) {
+                  handleDelete(doc.id, fileName)
+                }
+              }}
               className="text-red-500 hover:text-red-700 text-sm"
             >
               Delete
