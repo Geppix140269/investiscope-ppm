@@ -1,50 +1,36 @@
-# investiscope-ppm
-Property Project Management (PPM) system for InvestiScope™
-# InvestiScope PPM Documentation Hub
+# InvestiScope PPM - Property Project Management System
 
-## 📚 Documentation Structure
+## 🏗️ Overview
 
-### Core Documents
-- [📈 Progress Tracker](./PROGRESS.md) - Daily development updates
-- [🏗️ Architecture Decisions](./DECISIONS.md) - Technical choices and reasoning
-- [✅ TODO List](./TODO.md) - Task management and priorities
-- [📝 Changelog](./CHANGELOG.md) - Version history
-- [🚀 Setup Guide](./setup/README.md) - Getting started
+InvestiScope PPM is a comprehensive property project management system designed to streamline renovation and construction projects. Built with modern technologies and optimized for the free tier of various services.
 
-### Development Phases
-- [Phase 1: Planning](./01-planning/README.md)
-- [Phase 2: Architecture](./02-architecture/README.md)
-- [Phase 3: Implementation](./03-implementation/README.md)
-- [Phase 4: Deployment](./04-deployment/README.md)
+## 🚀 Tech Stack
 
-### Quick Links
-- [Live App](https://ppm.investiscope.net) (when deployed)
-- [Supabase Dashboard](https://app.supabase.com)
-- [Netlify Dashboard](https://app.netlify.com)
+- **Frontend**: Next.js 14, TypeScript, Tailwind CSS
+- **Backend**: Supabase (PostgreSQL, Auth, Realtime)
+- **Hosting**: Netlify
+- **File Storage**: Supabase Storage + Cloudinary
+- **Email**: Resend
+- **Monitoring**: Sentry, PostHog
 
-## 🎯 Project Overview
+## 📚 Documentation
 
-**Project**: InvestiScope Property Project Management (PPM)
-**Start Date**: ${new Date().toLocaleDateString()}
-**Status**: 🟡 In Development
-**Stack**: Next.js, Supabase, Netlify, Tailwind CSS
+- [📈 Development Progress](./docs/PROGRESS.md)
+- [✅ TODO List](./docs/TODO.md)
+- [🏗️ Architecture Decisions](./docs/DECISIONS.md)
+- [🚀 Setup Guide](./docs/setup/README.md)
 
-## 📊 Current Sprint
+## 🛠️ Quick Start
 
-See [PROGRESS.md](./PROGRESS.md) for current sprint details.
-
-## 🔧 Quick Commands
-
-\`\`\`bash
-# Clone repository
-git clone https://github.com/[your-username]/investiscope-ppm.git
+```bash
+# Clone the repository
+git clone https://github.com/Geppix140269/investiscope-ppm.git
 
 # Install dependencies
 npm install
 
-# Run development
-npm run dev
+# Set up environment variables
+cp .env.example .env.local
 
-# Deploy to Netlify
-npm run deploy
-\`\`\`
+# Run development server
+npm run dev
