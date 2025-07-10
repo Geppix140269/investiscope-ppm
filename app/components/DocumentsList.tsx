@@ -97,7 +97,7 @@ export default function DocumentsList({ propertyId, projectId, refreshTrigger }:
             </div>
           </div>
           <div className="flex space-x-2">
-            
+            <a
               href={doc.file_url}
               target="_blank"
               rel="noopener noreferrer"
@@ -106,12 +106,7 @@ export default function DocumentsList({ propertyId, projectId, refreshTrigger }:
               View
             </a>
             <button
-              onClick={() => {
-                const fileName = doc.file_url.split('/').pop()
-                if (fileName) {
-                  handleDelete(doc.id, fileName)
-                }
-              }}
+              onClick={() => handleDelete(doc.id, doc.file_url.split('/').pop() || '')}
               className="text-red-500 hover:text-red-700 text-sm"
             >
               Delete
