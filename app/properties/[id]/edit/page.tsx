@@ -23,40 +23,40 @@ export default function EditPropertyPage({ params }: { params: { id: string } })
   })
 
   useEffect(() => {
+    async function fetchProperty() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        router.push('/login')
+        return
+      }
+
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*')
+        .eq('id', params.id)
+        .single()
+
+      if (error || !data) {
+        router.push('/dashboard')
+        return
+      }
+
+      setFormData({
+        name: data.name || '',
+        address: data.address || '',
+        city: data.city || '',
+        postal_code: data.postal_code || '',
+        property_type: data.property_type || 'apartment',
+        size_sqm: data.size_sqm?.toString() || '',
+        purchase_price: data.purchase_price?.toString() || '',
+        current_value: data.current_value?.toString() || '',
+        description: data.description || ''
+      })
+      setLoading(false)
+    }
+
     fetchProperty()
-  }, [params.id])
-
-  async function fetchProperty() {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      router.push('/login')
-      return
-    }
-
-    const { data, error } = await supabase
-      .from('properties')
-      .select('*')
-      .eq('id', params.id)
-      .single()
-
-    if (error || !data) {
-      router.push('/dashboard')
-      return
-    }
-
-    setFormData({
-      name: data.name || '',
-      address: data.address || '',
-      city: data.city || '',
-      postal_code: data.postal_code || '',
-      property_type: data.property_type || 'apartment',
-      size_sqm: data.size_sqm?.toString() || '',
-      purchase_price: data.purchase_price?.toString() || '',
-      current_value: data.current_value?.toString() || '',
-      description: data.description || ''
-    })
-    setLoading(false)
-  }
+  }, [params.id, router, supabase])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
