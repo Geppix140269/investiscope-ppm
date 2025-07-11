@@ -1,9 +1,9 @@
 // app/dashboard/page.tsx
-// Enhanced Dashboard with Analytics
+// Enhanced Dashboard with Analytics - FIXED ESLINT ERROR
 
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -19,11 +19,7 @@ export default function DashboardPage() {
   const router = useRouter()
   const supabase = createClient()
 
-  useEffect(() => {
-    checkUserAndFetchData()
-  }, [])
-
-  async function checkUserAndFetchData() {
+  const checkUserAndFetchData = useCallback(async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
@@ -50,7 +46,11 @@ export default function DashboardPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [router, supabase])
+
+  useEffect(() => {
+    checkUserAndFetchData()
+  }, [checkUserAndFetchData])
 
   // Calculate statistics
   const stats = {
@@ -128,7 +128,7 @@ export default function DashboardPage() {
       <div className="bg-gradient-to-r from-indigo-600 to-emerald-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <h1 className="text-3xl font-bold">Welcome back, {user?.email?.split('@')[0]}!</h1>
-          <p className="text-indigo-100 mt-1">Here's your portfolio overview for {new Date().toLocaleDateString('en', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          <p className="text-indigo-100 mt-1">Here&apos;s your portfolio overview for {new Date().toLocaleDateString('en', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
         </div>
       </div>
 
