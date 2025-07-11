@@ -1,6 +1,6 @@
 # InvestiScope PPM - Project Status & Configuration
 
-> 🔄 **Last Updated**: July 11, 2025 - Day 2, Session 4
+> 🔄 **Last Updated**: July 11, 2025 - Day 2, Session 5
 > 
 > This file maintains the current state of the project for AI assistants and new developers.
 
@@ -33,11 +33,12 @@
    - Fields: project_id, title, description, assigned_to, status, due_date, priority
    - RLS policies configured
 
-5. **documents** ✅
+5. **documents** ✅ (Fixed July 11, 2025)
    - Document storage metadata with AI categorization
-   - Fields: property_id, project_id, name, file_url, file_size, file_type, category
+   - Fields: property_id, project_id, name, file_url, file_size, file_type, category, uploaded_by
    - Storage bucket: 'property-documents' created
-   - AI categorization implemented
+   - AI categorization implemented and working
+   - RLS policies fixed and working
 
 6. **team_members** ✅
    - Team collaboration
@@ -59,6 +60,7 @@
 - **property-documents** ✅
   - Public bucket for property/project documents
   - Max file size: 10MB
+  - Policies configured for authenticated users
 
 ## 🚀 Deployment Status
 
@@ -68,9 +70,9 @@
 - **Environment Variables**: ✅ Set
   - NEXT_PUBLIC_SUPABASE_URL
   - NEXT_PUBLIC_SUPABASE_ANON_KEY
-- **Custom Domain**: ⏳ Pending
+- **Custom Domain**: ⏳ Pending (currently using Netlify subdomain)
 - **Build Status**: ✅ Successfully deployed
-- **Live URL**: Active on Netlify
+- **Live URL**: Active on Netlify (investiscope.net)
 
 ## ⚡ Development Workflow
 
@@ -99,19 +101,23 @@
 
 ## 📝 Current Development Focus
 
-### Completed Features
+### Completed Features (Session 4-5 Updates)
 - ✅ Authentication (login/register/logout)
+- ✅ Full navigation system (all modules accessible)
 - ✅ Property CRUD operations
 - ✅ Project management with timeline/Gantt view
 - ✅ Task tracking system
 - ✅ Team member management
-- ✅ Document upload/management with AI categorization
-- ✅ Smart document categorization (invoices, contracts, permits, etc.)
-- ✅ Team invitation system
-- ✅ Basic dashboard
-- ✅ Property detail views
+- ✅ Document upload/management with AI categorization (FIXED)
+- ✅ Smart document categorization working (invoices, contracts, permits, etc.)
+- ✅ Team invitation system (UI complete, email pending)
+- ✅ Enhanced dashboard with stats
+- ✅ Property detail views with working tabs
+- ✅ Projects module fully integrated
+- ✅ Documents page showing all documents
+- ✅ Team page with member management
 - ✅ Multi-country support framework
-- ✅ Grant compliance checker (optional feature)
+- ✅ Grant compliance checker (basic version)
 - ✅ **Expense Tracking System** (July 11, 2025)
   - Automatic expense extraction from invoices
   - Budget tracking and categorization
@@ -119,16 +125,18 @@
   - CSV export functionality
 
 ### In Progress
-- 🔄 Email notifications (Resend integration)
+- 🔄 Email notifications (Resend integration needed)
 - 🔄 Project templates
 - 🔄 Enhanced dashboard analytics
+- 🔄 Advanced grant compliance features
 
 ### Pending
-- ⏳ Real-time updates
-- ⏳ Advanced reporting
+- ⏳ Real-time updates (Supabase realtime)
+- ⏳ Advanced reporting with charts
 - ⏳ Mobile app
 - ⏳ API for third-party integrations
 - ⏳ White-label options
+- ⏳ Multi-language support
 
 ## 🔑 Important Notes
 
@@ -143,103 +151,54 @@
 - RLS (Row Level Security) is enabled on all tables
 - Policies ensure users only see their own data
 
-### Recent Updates (July 11, 2025)
-1. **Expense Tracking System**: Full implementation with AI-powered invoice processing
-2. **Enhanced Document Upload**: Now extracts expense data from invoices automatically
-3. **Budget Management**: Track project expenses by category with visual progress indicators
-4. **Fixed Navigation Component**: Renamed to proper case (Navigation.tsx)
+### Recent Updates (July 11, 2025 - Session 4-5)
+1. **Fixed Document Upload**: Added missing columns, fixed RLS policies
+2. **Fixed Property Detail Tabs**: Tabs now visible and functional
+3. **Full Navigation**: All modules linked and accessible
+4. **Expense Tracking**: Full implementation with AI invoice processing
+5. **Enhanced Document Upload**: Extracts expense data automatically
+6. **All Core Features Working**: Ready for production use
 
 ### Next Steps for New Sessions
 When starting a new chat session, simply mention:
 1. "Continue InvestiScope PPM development"
 2. "Check PROJECT_STATUS.md for current state"
-3. Reference current session: Day 2, Session 4 (July 11, 2025)
-4. Priority features: Email notifications, Project templates, Dashboard analytics
+3. Reference current session: Day 2, Session 5 (July 11, 2025)
+4. Priority features: 
+   - Email notifications setup (Resend)
+   - Project templates
+   - Enhanced dashboard analytics
+   - Advanced reporting
 
 ## 🐛 Known Issues
-- None currently - all build errors fixed
+- Email notifications not configured (needs Resend API key)
+- Team invitations UI works but emails don't send
+- Real-time updates not implemented
+- Some advanced features still in basic form
 
 ## 📊 Performance Considerations
 - Using Supabase free tier (500MB limit)
 - Optimizing with JSONB columns
 - Planning Cloudinary integration for images
+- Current performance is good for expected load
 
 ## 🌍 Platform Vision
 - Global property project management system
-- Initial focus on Italy with built-in support for worldwide expansion
-- Grant compliance is an optional feature, not mandatory
-- AI-powered document processing for automatic data extraction
+- Initial focus on Italy (Puglia) with worldwide support
+- Grant compliance as optional feature
+- AI-powered document processing
+- Team collaboration at the core
+- Mobile-first responsive design
+
+## ✅ Testing Status
+- Authentication: ✅ Tested and working
+- Properties CRUD: ✅ Tested and working
+- Document Upload: ✅ Fixed and tested
+- Projects: ✅ Tested and working
+- Navigation: ✅ All links working
+- Team Management: ✅ UI working (email pending)
+- Expense Tracking: ✅ Tested with mock AI
 
 ---
 
 *This file should be updated after each significant development session*
-Update at 17:21 11th July 2025
-This is joyfully painful!! I am truysting the Universe here!!! hahahaha...anyway update:
-# Implementation Summary - Fix Navigation and Add Missing Pages
-
-## Files to Update:
-
-### 1. Navigation Component
-**File:** `app/components/Navigation.tsx`
-- ✅ Added all navigation links (Dashboard, Properties, Projects, Documents, Team)
-- ✅ Fixed logo to always link to home page (`/`)
-- ✅ Better authentication handling
-
-### 2. Properties Page Fix
-**File:** `app/properties/page.tsx`
-- ✅ Fixed authentication check
-- ✅ Added proper loading state
-- ✅ Improved error handling
-
-## New Files to Create:
-
-### 3. Documents Page
-**Path:** `app/documents/page.tsx`
-- Shows all documents across properties and projects
-- Search and filter functionality
-- Document management (view, download, delete)
-
-### 4. Team Page
-**Path:** `app/team/page.tsx`
-- Team member management
-- Invite functionality (UI ready, backend needs email setup)
-- Role-based permissions display
-
-## What This Fixes:
-
-1. **Navigation Issues:**
-   - Logo now properly links to home page
-   - All navigation links work
-   - Properties page no longer redirects to login
-
-2. **Missing Features:**
-   - Documents page now exists
-   - Team page now exists
-   - Projects links are already created (from earlier)
-
-3. **User Experience:**
-   - Clear navigation structure
-   - Consistent design across pages
-   - Proper empty states with guidance
-
-## Next Steps After Implementation:
-
-1. **Email Setup (for team invites)**
-   - Configure Resend for email notifications
-   - Implement actual invite sending
-
-2. **Project Management Pages**
-   - Add the project pages we created earlier
-   - Link them in navigation
-
-3. **Enhanced Features:**
-   - Real-time updates
-   - Better file upload UI
-   - Activity tracking
-
-## Deployment Notes:
-After creating these files, your app will have:
-- ✅ Working navigation
-- ✅ All main sections accessible
-- ✅ Consistent user experience
-- ✅ No broken links
