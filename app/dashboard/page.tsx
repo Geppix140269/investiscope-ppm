@@ -85,7 +85,7 @@ export default function DashboardPage() {
       <div className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <h1 className="text-2xl font-bold text-gray-900">Welcome back!</h1>
-          <p className="text-gray-600 mt-1">Here's an overview of your property portfolio</p>
+          <p className="text-gray-600 mt-1">Here&apos;s an overview of your property portfolio</p>
         </div>
       </div>
 
