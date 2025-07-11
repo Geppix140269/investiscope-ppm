@@ -136,13 +136,14 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
           </div>
         </div>
 
-        {/* Tabs */}
+        {/* Tabs Container */}
         <div className="bg-white rounded-lg shadow">
+          {/* Tab Navigation */}
           <div className="border-b border-gray-200">
             <nav className="-mb-px flex">
               <button
                 onClick={() => setActiveTab('overview')}
-                className={`py-2 px-4 border-b-2 font-medium text-sm ${
+                className={`py-2 px-6 border-b-2 font-medium text-sm transition-colors ${
                   activeTab === 'overview'
                     ? 'border-blue-500 text-blue-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -152,7 +153,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
               </button>
               <button
                 onClick={() => setActiveTab('projects')}
-                className={`py-2 px-4 border-b-2 font-medium text-sm ${
+                className={`py-2 px-6 border-b-2 font-medium text-sm transition-colors ${
                   activeTab === 'projects'
                     ? 'border-blue-500 text-blue-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -162,7 +163,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
               </button>
               <button
                 onClick={() => setActiveTab('documents')}
-                className={`py-2 px-4 border-b-2 font-medium text-sm ${
+                className={`py-2 px-6 border-b-2 font-medium text-sm transition-colors ${
                   activeTab === 'documents'
                     ? 'border-blue-500 text-blue-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -173,6 +174,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
             </nav>
           </div>
 
+          {/* Tab Content */}
           <div className="p-6">
             {/* Overview Tab */}
             {activeTab === 'overview' && (
