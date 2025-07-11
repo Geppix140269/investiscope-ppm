@@ -356,7 +356,7 @@ export default function NewProjectPage() {
                     Grant Documentation Requirements
                   </h4>
                   <p className="text-sm text-yellow-700 mb-2">
-                    You'll need to maintain proper documentation for grant compliance.
+                    You&apos;ll need to maintain proper documentation for grant compliance.
                   </p>
                   <Link
                     href="https://investiscope.net/calculator"
