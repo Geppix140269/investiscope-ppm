@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvestiScope PPM - Live Project Dashboard</title>
+    <meta http-equiv="refresh" content="300"> <!-- Auto-refresh every 5 minutes -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 20px;
+        }
+
+        .dashboard {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .last-updated {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .metric-card h3 {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .metric-label {
+            font-size: 0.85em;
+            color: #888;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 1s ease;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .commit-list {
+            list-style: none;
+        }
+
+        .commit-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .commit-item:hover {
+            background: #f0f1f3;
+            transform: translateX(5px);
+            border-left-color: #667eea;
+        }
+
+        .commit-hash {
+            font-family: monospace;
+            background: #e0e0e0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-right: 10px;
+        }
+
+        .commit-message {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .commit-meta {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .status-badge.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .todo-stats {
+            margin-top: 20px;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .todo-icon {
+            font-size: 1.2em;
+        }
+
+        .github-badge {
+            margin: 5px;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <div class="header">
+            <h1>InvestiScope PPM - Live Project Dashboard</h1>
+            <p class="subtitle">Automatically updated from GitHub repository</p>
+            <p class="last-updated" id="lastUpdated">Loading...</p>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="loading">
+            <div style="font-size: 3em; margin-bottom: 20px;">⏳</div>
+            <p>Fetching latest project data...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="error" class="error" style="display: none;">
+            <h3>Unable to load dashboard data</h3>
+            <p>Please ensure GitHub Actions have run at least once.</p>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div id="dashboardContent" style="display: none;">
+            <!-- Key Metrics -->
+            <div class="metrics-grid" id="metricsGrid">
+                <!-- Metrics will be inserted here -->
+            </div>
+
+            <!-- Main Grid -->
+            <div class="main-grid">
+                <!-- Recent Commits -->
+                <div class="section fade-in">
+                    <h2><span class="emoji">📝</span> Recent Commits</h2>
+                    <ul class="commit-list" id="commitList">
+                        <!-- Commits will be inserted here -->
+                    </ul>
+                </div>
+
+                <!-- Project Stats -->
+                <div class="section fade-in">
+                    <h2><span class="emoji">📊</span> Project Statistics</h2>
+                    <div id="projectStats">
+                        <!-- Stats will be inserted here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- TODO Progress -->
+            <div class="section fade-in">
+                <h2><span class="emoji">✅</span> TODO Progress</h2>
+                <div id="todoProgress">
+                    <!-- TODO stats will be inserted here -->
+                </div>
+            </div>
+
+            <!-- GitHub Badges -->
+            <div class="section fade-in">
+                <h2><span class="emoji">🏆</span> Live Repository Status</h2>
+                <div style="text-align: center;">
+                    <img class="github-badge" src="https://img.shields.io/github/stars/Geppix140269/investiscope-ppm?style=for-the-badge&color=667eea" alt="Stars">
+                    <img class="github-badge" src="https://img.shields.io/github/issues/Geppix140269/investiscope-ppm?style=for-the-badge&color=764ba2" alt="Issues">
+                    <img class="github-badge" src="https://img.shields.io/github/last-commit/Geppix140269/investiscope-ppm?style=for-the-badge&color=667eea" alt="Last Commit">
+                    <img class="github-badge" src="https://img.shields.io/github/commit-activity/w/Geppix140269/investiscope-ppm?style=for-the-badge&color=764ba2" alt="Commit Activity">
+                    <img class="github-badge" src="https://img.shields.io/github/languages/top/Geppix140269/investiscope-ppm?style=for-the-badge&color=667eea" alt="Top Language">
+                    <img class="github-badge" src="https://img.shields.io/github/repo-size/Geppix140269/investiscope-ppm?style=for-the-badge&color=764ba2" alt="Repo Size">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fetch and display dashboard data
+        async function loadDashboard() {
+            try {
+                const response = await fetch('./dashboard-data.json');
+                
+                if (!response.ok) {
+                    throw new Error('Dashboard data not found');
+                }
+                
+                const data = await response.json();
+                
+                // Hide loading, show content
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'none';
+                document.getElementById('dashboardContent').style.display = 'block';
+                
+                // Update last updated time
+                const lastUpdated = new Date(data.metadata.lastUpdated);
+                document.getElementById('lastUpdated').textContent = 
+                    `Last Updated: ${lastUpdated.toLocaleString()} (Auto-refreshes every 5 minutes)`;
+                
+                // Generate metrics cards
+                const metricsHTML = `
+                    <div class="metric-card">
+                        <h3>Total Commits</h3>
+                        <div class="metric-value">${data.statistics.totalCommits}</div>
+                        <div class="metric-label">Since project start</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h3>Project Files</h3>
+                        <div class="metric-value">${data.statistics.totalFiles}</div>
+                        <div class="metric-label">${data.statistics.typeScriptFiles} TypeScript, ${data.statistics.javaScriptFiles} JavaScript</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h3>TODO Progress</h3>
+                        <div class="metric-value">${data.todo.percentage}%</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${data.todo.percentage}%"></div>
+                        </div>
+                        <div class="metric-label">${data.todo.completed} of ${data.todo.total} tasks completed</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h3>Build Status</h3>
+                        <div class="metric-value">
+                            <span class="status-badge success">
+                                <span class="status-indicator"></span>
+                                ${data.build.status.toUpperCase()}
+                            </span>
+                        </div>
+                        <div class="metric-label">Build #${data.build.runNumber}</div>
+                    </div>
+                `;
+                document.getElementById('metricsGrid').innerHTML = metricsHTML;
+                
+                // Generate recent commits
+                const commitsHTML = data.recentCommits.slice(0, 5).map(commit => {
+                    const commitDate = new Date(commit.date);
+                    return `
+                        <li class="commit-item">
+                            <div class="commit-message">
+                                <span class="commit-hash">${commit.hash}</span>
+                                ${escapeHtml(commit.message)}
+                            </div>
+                            <div class="commit-meta">
+                                ${commit.author} • ${commitDate.toLocaleString()}
+                            </div>
+                        </li>
+                    `;
+                }).join('');
+                document.getElementById('commitList').innerHTML = commitsHTML;
+                
+                // Generate project stats
+                const statsHTML = `
+                    <div class="todo-item">
+                        <span class="emoji">📦</span>
+                        <strong>Components:</strong> ${data.statistics.components}
+                    </div>
+                    <div class="todo-item">
+                        <span class="emoji">📄</span>
+                        <strong>Pages:</strong> ${data.statistics.pages}
+                    </div>
+                    <div class="todo-item">
+                        <span class="emoji">💻</span>
+                        <strong>TypeScript Files:</strong> ${data.statistics.typeScriptFiles}
+                    </div>
+                    <div class="todo-item">
+                        <span class="emoji">📝</span>
+                        <strong>JavaScript Files:</strong> ${data.statistics.javaScriptFiles}
+                    </div>
+                    <div class="todo-item">
+                        <span class="emoji">📊</span>
+                        <strong>Total Files:</strong> ${data.statistics.totalFiles}
+                    </div>
+                `;
+                document.getElementById('projectStats').innerHTML = statsHTML;
+                
+                // Generate TODO progress details
+                const todoHTML = `
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="margin-bottom: 10px;">Overall Progress: ${data.todo.percentage}%</h3>
+                        <div class="progress-bar" style="height: 20px;">
+                            <div class="progress-fill" style="width: ${data.todo.percentage}%"></div>
+                        </div>
+                    </div>
+                    <div class="todo-stats">
+                        <div class="todo-item">
+                            <span class="emoji">✅</span>
+                            <strong>Completed Tasks:</strong> ${data.todo.completed}
+                        </div>
+                        <div class="todo-item">
+                            <span class="emoji">⏳</span>
+                            <strong>Pending Tasks:</strong> ${data.todo.total - data.todo.completed}
+                        </div>
+                        <div class="todo-item">
+                            <span class="emoji">📋</span>
+                            <strong>Total Tasks:</strong> ${data.todo.total}
+                        </div>
+                    </div>
+                    <p style="margin-top: 20px; color: #666; font-size: 0.9em;">
+                        Tasks are automatically tracked from <code>docs/TODO.md</code>
+                    </p>
+                `;
+                document.getElementById('todoProgress').innerHTML = todoHTML;
+                
+                // Animate progress bars
+                setTimeout(() => {
+                    document.querySelectorAll('.progress-fill').forEach(bar => {
+                        const width = bar.style.width;
+                        bar.style.width = '0';
+                        setTimeout(() => {
+                            bar.style.width = width;
+                        }, 100);
+                    });
+                }, 100);
+                
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+        
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+        
+        // Load dashboard on page load
+        loadDashboard();
+        
+        // Reload dashboard every 5 minutes
+        setInterval(loadDashboard, 5 * 60 * 1000);
+    </script>
+</body>
+</html>
