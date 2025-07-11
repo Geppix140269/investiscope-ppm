@@ -1,6 +1,3 @@
-// app/layout.tsx
-// Updated with PWA support
-
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './global.css'
@@ -18,6 +15,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://investiscope.net'),
   title: 'InvestiScope PPM - Property Project Management for Puglia',
   description: 'Professional property project management platform for international investors in Puglia, Italy. Track properties, manage renovations, and maximize Mini PIA grants.',
   keywords: 'property management puglia, italian property investment, mini pia grants, puglia real estate, property project management',
