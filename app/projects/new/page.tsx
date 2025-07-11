@@ -1,15 +1,20 @@
+// app/projects/new/page.tsx
+// Updated with project templates
+
 'use client'
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { projectTemplates, getProjectTemplate, calculateEndDate, generateTasksFromTemplate } from '@/lib/projectTemplates'
 
 export default function NewProjectPage() {
   const router = useRouter()
   const supabase = createClient()
   const [loading, setLoading] = useState(false)
   const [properties, setProperties] = useState<any[]>([])
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     property_id: '',
     name: '',
@@ -28,6 +33,36 @@ export default function NewProjectPage() {
     checkUserAndFetchProperties()
   }, [])
 
+  useEffect(() => {
+    // Update form when template is selected
+    if (selectedTemplate) {
+      const template = getProjectTemplate(selectedTemplate)
+      if (template) {
+        setFormData(prev => ({
+          ...prev,
+          name: template.name,
+          description: template.description,
+          project_type: template.category,
+          budget: template.budgetRange.min.toString(),
+          end_date: prev.start_date ? calculateEndDate(prev.start_date, template.estimatedDuration) : ''
+        }))
+      }
+    }
+  }, [selectedTemplate])
+
+  useEffect(() => {
+    // Update end date when start date changes
+    if (formData.start_date && selectedTemplate) {
+      const template = getProjectTemplate(selectedTemplate)
+      if (template) {
+        setFormData(prev => ({
+          ...prev,
+          end_date: calculateEndDate(prev.start_date, template.estimatedDuration)
+        }))
+      }
+    }
+  }, [formData.start_date, selectedTemplate])
+
   async function checkUserAndFetchProperties() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
@@ -44,7 +79,6 @@ export default function NewProjectPage() {
       console.error('Error fetching properties:', error)
     } else {
       setProperties(data || [])
-      // If there's only one property, pre-select it
       if (data && data.length === 1) {
         setFormData(prev => ({ ...prev, property_id: data[0].id }))
       }
@@ -62,7 +96,7 @@ export default function NewProjectPage() {
       return
     }
 
-    // Prepare the data for insertion
+    // Create project
     const projectData = {
       ...formData,
       user_id: user.id,
@@ -73,22 +107,46 @@ export default function NewProjectPage() {
         priority: formData.priority,
         grant_type: formData.grant_type,
         country: formData.country,
+        template_used: selectedTemplate,
         created_by: user.email
       }
     }
 
-    const { data, error } = await supabase
+    const { data: project, error: projectError } = await supabase
       .from('projects')
       .insert(projectData)
       .select()
       .single()
 
-    if (error) {
-      alert('Error creating project: ' + error.message)
+    if (projectError) {
+      alert('Error creating project: ' + projectError.message)
       setLoading(false)
-    } else {
-      router.push(`/projects/${data.id}`)
+      return
     }
+
+    // If template was used, create tasks
+    if (selectedTemplate && project) {
+      const template = getProjectTemplate(selectedTemplate)
+      if (template) {
+        const tasks = generateTasksFromTemplate(template, formData.start_date || new Date().toISOString().split('T')[0])
+        
+        const tasksToInsert = tasks.map(task => ({
+          ...task,
+          project_id: project.id,
+          created_by: user.id
+        }))
+
+        const { error: tasksError } = await supabase
+          .from('tasks')
+          .insert(tasksToInsert)
+
+        if (tasksError) {
+          console.error('Error creating tasks:', tasksError)
+        }
+      }
+    }
+
+    router.push(`/projects/${project.id}`)
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -98,18 +156,9 @@ export default function NewProjectPage() {
     })
   }
 
-  const projectTypes = [
-    { value: 'renovation', label: 'Full Renovation', icon: '🏗️' },
-    { value: 'maintenance', label: 'Maintenance', icon: '🔧' },
-    { value: 'improvement', label: 'Home Improvement', icon: '🏡' },
-    { value: 'repair', label: 'Repair Work', icon: '🔨' },
-    { value: 'landscaping', label: 'Landscaping', icon: '🌳' },
-    { value: 'energy', label: 'Energy Efficiency', icon: '⚡' }
-  ]
-
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-3xl mx-auto px-4">
+      <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
           <Link 
@@ -122,7 +171,45 @@ export default function NewProjectPage() {
             Back to Projects
           </Link>
           <h1 className="text-3xl font-bold text-gray-900">Create New Project</h1>
-          <p className="text-gray-600 mt-2">Start a new renovation or maintenance project for your property</p>
+          <p className="text-gray-600 mt-2">Start with a template or create a custom project</p>
+        </div>
+
+        {/* Template Selection */}
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Choose a Template (Optional)</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <button
+              type="button"
+              onClick={() => setSelectedTemplate(null)}
+              className={`p-4 rounded-xl border-2 text-left transition-all ${
+                selectedTemplate === null
+                  ? 'border-indigo-500 bg-indigo-50'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <div className="text-2xl mb-2">✨</div>
+              <h3 className="font-semibold text-gray-900">Custom Project</h3>
+              <p className="text-sm text-gray-600">Start from scratch</p>
+            </button>
+
+            {projectTemplates.map((template) => (
+              <button
+                key={template.id}
+                type="button"
+                onClick={() => setSelectedTemplate(template.id)}
+                className={`p-4 rounded-xl border-2 text-left transition-all ${
+                  selectedTemplate === template.id
+                    ? 'border-indigo-500 bg-indigo-50'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <div className="text-2xl mb-2">{template.icon}</div>
+                <h3 className="font-semibold text-gray-900">{template.name}</h3>
+                <p className="text-sm text-gray-600 mb-2">{template.estimatedDuration} days • €{template.budgetRange.min.toLocaleString()}-{template.budgetRange.max.toLocaleString()}</p>
+                <p className="text-xs text-gray-500">{template.tasks.length} tasks included</p>
+              </button>
+            ))}
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
@@ -176,49 +263,6 @@ export default function NewProjectPage() {
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  placeholder="e.g., Kitchen Renovation, Roof Repair"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Project Type
-                </label>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {projectTypes.map(type => (
-                    <label
-                      key={type.value}
-                      className={`relative flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all ${
-                        formData.project_type === type.value
-                          ? 'border-indigo-500 bg-indigo-50'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="project_type"
-                        value={type.value}
-                        checked={formData.project_type === type.value}
-                        onChange={handleChange}
-                        className="sr-only"
-                      />
-                      <span className="text-2xl mr-3">{type.icon}</span>
-                      <span className="text-sm font-medium">{type.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description
-                </label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  rows={4}
                   className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   placeholder="Describe the scope of work, objectives, and any special requirements..."
                 />
@@ -279,6 +323,11 @@ export default function NewProjectPage() {
                   placeholder="Enter total budget"
                   step="0.01"
                 />
+                {selectedTemplate && (
+                  <p className="text-sm text-gray-500 mt-1">
+                    Template suggests: €{getProjectTemplate(selectedTemplate)?.budgetRange.min.toLocaleString()} - €{getProjectTemplate(selectedTemplate)?.budgetRange.max.toLocaleString()}
+                  </p>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -307,6 +356,11 @@ export default function NewProjectPage() {
                     min={formData.start_date}
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   />
+                  {selectedTemplate && (
+                    <p className="text-sm text-gray-500 mt-1">
+                      Template duration: {getProjectTemplate(selectedTemplate)?.estimatedDuration} days
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -356,7 +410,7 @@ export default function NewProjectPage() {
                     Grant Documentation Requirements
                   </h4>
                   <p className="text-sm text-yellow-700 mb-2">
-                    You&apos;ll need to maintain proper documentation for grant compliance.
+                    You'll need to maintain proper documentation for grant compliance.
                   </p>
                   <Link
                     href="https://investiscope.net/calculator"
@@ -370,6 +424,37 @@ export default function NewProjectPage() {
               )}
             </div>
           </div>
+
+          {/* Template Preview */}
+          {selectedTemplate && (
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Template Tasks Preview</h2>
+              <p className="text-sm text-gray-600 mb-4">
+                These tasks will be automatically created for your project:
+              </p>
+              <div className="space-y-2 max-h-64 overflow-y-auto">
+                {getProjectTemplate(selectedTemplate)?.tasks.map((task, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-900">{task.title}</p>
+                      <p className="text-sm text-gray-600">{task.description}</p>
+                    </div>
+                    <div className="text-right">
+                      <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+                        task.priority === 'urgent' ? 'bg-red-100 text-red-800' :
+                        task.priority === 'high' ? 'bg-orange-100 text-orange-800' :
+                        task.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-gray-100 text-gray-800'
+                      }`}>
+                        {task.priority}
+                      </span>
+                      <p className="text-xs text-gray-500 mt-1">{task.estimatedDays} days</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Form Actions */}
           <div className="flex justify-between items-center">
@@ -404,30 +489,21 @@ export default function NewProjectPage() {
             </div>
           </div>
         </form>
-
-        {/* Tips Section */}
-        <div className="mt-12 bg-gradient-to-r from-indigo-50 to-emerald-50 rounded-xl p-6">
-          <h3 className="font-semibold text-gray-900 mb-3">💡 Project Management Tips</h3>
-          <ul className="space-y-2 text-sm text-gray-700">
-            <li className="flex items-start">
-              <span className="text-indigo-500 mr-2">•</span>
-              Break down large renovations into multiple smaller projects for better tracking
-            </li>
-            <li className="flex items-start">
-              <span className="text-indigo-500 mr-2">•</span>
-              Set realistic timelines with buffer time for unexpected delays
-            </li>
-            <li className="flex items-start">
-              <span className="text-indigo-500 mr-2">•</span>
-              Include a 10-20% contingency in your budget for unforeseen costs
-            </li>
-            <li className="flex items-start">
-              <span className="text-indigo-500 mr-2">•</span>
-              Document everything with photos and receipts for grant applications
-            </li>
-          </ul>
-        </div>
       </div>
     </div>
   )
 }
+                  placeholder="e.g., Kitchen Renovation, Roof Repair"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description
+                </label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows={4}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
