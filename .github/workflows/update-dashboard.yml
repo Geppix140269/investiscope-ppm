@@ -1,0 +1,122 @@
+name: Update Project Dashboard
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 */6 * * *'  # Run every 6 hours
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  update-dashboard:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for accurate stats
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Generate Dashboard Data
+        run: |
+          # Create docs directory if it doesn't exist
+          mkdir -p docs
+          
+          # Get repository statistics
+          TOTAL_COMMITS=$(git rev-list --count HEAD)
+          LAST_COMMIT_MSG=$(git log -1 --pretty=format:'%s')
+          LAST_COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')
+          LAST_COMMIT_DATE=$(git log -1 --pretty=format:'%ad' --date=iso)
+          LAST_COMMIT_HASH=$(git log -1 --pretty=format:'%h')
+          
+          # Count files by type
+          TS_FILES=$(find . -name "*.ts" -o -name "*.tsx" | grep -v node_modules | wc -l)
+          JS_FILES=$(find . -name "*.js" -o -name "*.jsx" | grep -v node_modules | wc -l)
+          TOTAL_FILES=$(find . -type f | grep -v node_modules | grep -v .git | wc -l)
+          
+          # Parse TODO.md if it exists
+          if [ -f "docs/TODO.md" ]; then
+            TODO_COMPLETED=$(grep -c "\[x\]" docs/TODO.md || echo 0)
+            TODO_TOTAL=$(grep -c "\[\s*\]" docs/TODO.md || echo $TODO_COMPLETED)
+            TODO_PERCENTAGE=$((TODO_COMPLETED * 100 / (TODO_TOTAL + TODO_COMPLETED)))
+          else
+            TODO_COMPLETED=0
+            TODO_TOTAL=0
+            TODO_PERCENTAGE=0
+          fi
+          
+          # Get recent commits (last 10)
+          RECENT_COMMITS=$(git log -10 --pretty=format:'{"hash":"%h","author":"%an","date":"%ad","message":"%s"}' --date=iso | jq -s '.')
+          
+          # Count features from specific directories
+          COMPONENTS=$(find . -path "*/components/*.tsx" -o -path "*/components/*.jsx" | grep -v node_modules | wc -l)
+          PAGES=$(find . -path "*/pages/*" -o -path "*/app/*" | grep -v node_modules | grep -E '\.(tsx|jsx|ts|js)$' | wc -l)
+          
+          # Generate comprehensive dashboard data
+          cat > docs/dashboard-data.json << EOF
+          {
+            "metadata": {
+              "lastUpdated": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+              "repository": "Geppix140269/investiscope-ppm",
+              "branch": "main"
+            },
+            "statistics": {
+              "totalCommits": $TOTAL_COMMITS,
+              "totalFiles": $TOTAL_FILES,
+              "typeScriptFiles": $TS_FILES,
+              "javaScriptFiles": $JS_FILES,
+              "components": $COMPONENTS,
+              "pages": $PAGES
+            },
+            "lastCommit": {
+              "hash": "$LAST_COMMIT_HASH",
+              "message": "$LAST_COMMIT_MSG",
+              "author": "$LAST_COMMIT_AUTHOR",
+              "date": "$LAST_COMMIT_DATE"
+            },
+            "todo": {
+              "completed": $TODO_COMPLETED,
+              "total": $((TODO_TOTAL + TODO_COMPLETED)),
+              "percentage": $TODO_PERCENTAGE
+            },
+            "recentCommits": $RECENT_COMMITS,
+            "build": {
+              "status": "success",
+              "workflow": "${{ github.workflow }}",
+              "runNumber": "${{ github.run_number }}",
+              "runId": "${{ github.run_id }}"
+            }
+          }
+          EOF
+          
+          # Generate build timestamp
+          echo $(date -u +"%Y-%m-%dT%H:%M:%SZ") > docs/last-build.txt
+      
+      - name: Commit dashboard updates
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docs/dashboard-data.json docs/last-build.txt
+          git diff --staged --quiet || git commit -m "🤖 Update dashboard data [skip ci]"
+          git push
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+        
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: 'docs'
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
