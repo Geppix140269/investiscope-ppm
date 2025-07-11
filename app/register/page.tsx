@@ -180,7 +180,7 @@ export default function RegisterPage() {
                 <svg className="w-5 h-5 text-emerald-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
-                Unlimited properties & projects
+                Unlimited properties &amp; projects
               </li>
               <li className="flex items-center">
                 <svg className="w-5 h-5 text-emerald-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -257,7 +257,7 @@ export default function RegisterPage() {
               ))}
             </div>
             <p className="text-white/90 italic mb-4">
-              "The best investment we made was using PPM. It paid for itself in the first month through better project management and grant tracking."
+              &quot;The best investment we made was using PPM. It paid for itself in the first month through better project management and grant tracking.&quot;
             </p>
             <div className="flex items-center">
               <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full mr-3"></div>
