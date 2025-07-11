@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
 interface DocumentsListProps {
@@ -14,11 +14,7 @@ export default function DocumentsList({ propertyId, projectId, refreshTrigger }:
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
 
-  useEffect(() => {
-    fetchDocuments()
-  }, [propertyId, projectId, refreshTrigger])
-
-  async function fetchDocuments() {
+  const fetchDocuments = useCallback(async () => {
     let query = supabase
       .from('documents')
       .select('*')
@@ -37,7 +33,11 @@ export default function DocumentsList({ propertyId, projectId, refreshTrigger }:
       setDocuments(data || [])
     }
     setLoading(false)
-  }
+  }, [propertyId, projectId, supabase])
+
+  useEffect(() => {
+    fetchDocuments()
+  }, [fetchDocuments, refreshTrigger])
 
   async function handleDelete(documentId: string, fileName: string) {
     if (!confirm('Are you sure you want to delete this document?')) return
