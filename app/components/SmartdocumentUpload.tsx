@@ -168,8 +168,8 @@ export default function SmartDocumentUpload({ propertyId, projectId, onUploadCom
         <div className="bg-gradient-to-r from-indigo-50 to-emerald-50 rounded-xl p-6 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold text-gray-900">Document Analysis</h3>
-            <span className={`px-3 py-1 rounded-full text-sm font-medium border ${categoryColors[analysis.category]}`}>
-              {categoryIcons[analysis.category]} {analysis.category.replace('_', ' ')}
+            <span className={`px-3 py-1 rounded-full text-sm font-medium border ${categoryColors[analysis.category as DocumentCategory]}`}>
+              {categoryIcons[analysis.category as DocumentCategory]} {analysis.category.replace('_', ' ')}
             </span>
           </div>
 
