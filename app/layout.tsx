@@ -1,9 +1,13 @@
 import type { Metadata } from 'next'
-import './global.css'
+import { Inter } from 'next/font/google'
+import './globals.css'
+import Navigation from './components/Navigation'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'InvestiScope PPM',
-  description: 'Property Project Management System',
+  title: 'InvestiScope PPM - Property Project Management',
+  description: 'Professional property project management for Puglia investors',
 }
 
 export default function RootLayout({
@@ -13,7 +17,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={inter.className}>
+        <Navigation />
+        <main className="pt-16">
+          {children}
+        </main>
+      </body>
     </html>
   )
 }
