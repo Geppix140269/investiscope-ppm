@@ -13,13 +13,13 @@ export default function Navigation() {
   const supabase = createClient()
 
   useEffect(() => {
+    async function checkUser() {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
+    }
+    
     checkUser()
-  }, [])
-
-  async function checkUser() {
-    const { data: { user } } = await supabase.auth.getUser()
-    setUser(user)
-  }
+  }, [supabase])
 
   async function signOut() {
     await supabase.auth.signOut()
