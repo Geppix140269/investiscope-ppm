@@ -146,7 +146,7 @@ export default function LoginPage() {
           {/* Sign Up Link */}
           <div className="mt-8 text-center">
             <p className="text-gray-600">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link href="/register" className="text-indigo-600 hover:text-indigo-500 font-medium">
                 Start your free trial
               </Link>
@@ -207,7 +207,7 @@ export default function LoginPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold">Team Collaboration</h3>
-                  <p className="text-white/80 text-sm">Work seamlessly with architects & contractors</p>
+                  <p className="text-white/80 text-sm">Work seamlessly with architects &amp; contractors</p>
                 </div>
               </div>
             </div>
@@ -215,7 +215,7 @@ export default function LoginPage() {
             {/* Testimonial */}
             <div className="mt-12 bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
               <p className="text-white/90 italic mb-4">
-                "InvestiScope PPM transformed how we manage our Puglia portfolio. The grant tracking alone saved us €120,000!"
+                &quot;InvestiScope PPM transformed how we manage our Puglia portfolio. The grant tracking alone saved us €120,000!&quot;
               </p>
               <div className="flex items-center">
                 <div className="w-10 h-10 bg-white/20 rounded-full mr-3"></div>
