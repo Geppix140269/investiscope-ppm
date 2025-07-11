@@ -1,174 +1,199 @@
-// File: app/components/Navigation.tsx
-// SIMPLIFIED VERSION - Only includes working features
+// File: app/dashboard/page.tsx
+// FIXED VERSION - Addresses empty content issue
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
-export default function Navigation() {
+export default function DashboardPage() {
   const [user, setUser] = useState<any>(null)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [properties, setProperties] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const router = useRouter()
-  const pathname = usePathname()
   const supabase = createClient()
 
   useEffect(() => {
-    checkUser()
-    
-    // Subscribe to auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-    })
-
-    return () => subscription.unsubscribe()
+    checkUserAndFetchData()
   }, [])
 
-  async function checkUser() {
-    const { data: { user } } = await supabase.auth.getUser()
-    setUser(user)
-    setLoading(false)
+  async function checkUserAndFetchData() {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        router.push('/login')
+        return
+      }
+      
+      setUser(user)
+      
+      // Fetch properties with error handling
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        console.error('Error fetching properties:', error)
+        setProperties([])
+      } else {
+        setProperties(data || [])
+      }
+    } catch (error) {
+      console.error('Dashboard error:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  async function signOut() {
-    await supabase.auth.signOut()
-    router.push('/')
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading your dashboard...</p>
+        </div>
+      </div>
+    )
   }
 
-  // ONLY INCLUDE WORKING PAGES
-  const navigation = [
-    { name: 'Dashboard', href: '/dashboard' },
-    { name: 'Properties', href: '/properties' },
-    // Projects - removed until fully working
-    // Documents - removed until working
-    // Team - removed until working
-  ]
-
-  // Don't show navigation on auth pages
-  const authPages = ['/login', '/register', '/']
-  const isAuthPage = authPages.includes(pathname)
-
-  if (loading) return null
+  const totalInvestment = properties.reduce((sum, p) => sum + (p.purchase_price || 0), 0)
 
   return (
-    <nav className="bg-white border-b border-gray-200 fixed w-full top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            {/* Logo */}
-            <Link href="/" className="flex items-center">
-              <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 bg-clip-text text-transparent">
-                InvestiScope PPM
-              </h1>
-            </Link>
-
-            {/* Desktop Navigation - Only show if logged in */}
-            {user && !isAuthPage && (
-              <div className="hidden md:ml-8 md:flex md:space-x-4">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={`inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                      pathname === item.href
-                        ? 'text-indigo-600 bg-indigo-50'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Right side */}
-          <div className="flex items-center">
-            {user && !isAuthPage ? (
-              <div className="flex items-center space-x-4">
-                <span className="hidden md:block text-sm text-gray-600">{user.email}</span>
-                <button
-                  onClick={signOut}
-                  className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  Sign Out
-                </button>
-              </div>
-            ) : !isAuthPage ? (
-              <div className="flex items-center space-x-4">
-                <Link
-                  href="/login"
-                  className="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-md text-sm font-medium"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/register"
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  Get Started
-                </Link>
-              </div>
-            ) : null}
-
-            {/* Mobile menu button */}
-            {user && !isAuthPage && (
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="ml-4 md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
-              >
-                <span className="sr-only">Open main menu</span>
-                {mobileMenuOpen ? (
-                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                ) : (
-                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                )}
-              </button>
-            )}
-          </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Welcome Section */}
+      <div className="bg-white shadow">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <h1 className="text-2xl font-bold text-gray-900">Welcome back!</h1>
+          <p className="text-gray-600 mt-1">Manage your Puglia property portfolio</p>
         </div>
       </div>
 
-      {/* Mobile menu */}
-      {mobileMenuOpen && user && !isAuthPage && (
-        <div className="md:hidden bg-white border-b border-gray-200">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`block px-3 py-2 rounded-md text-base font-medium ${
-                  pathname === item.href
-                    ? 'text-indigo-600 bg-indigo-50'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {item.name}
-              </Link>
-            ))}
-            <div className="border-t border-gray-200 pt-2 mt-2">
-              <div className="px-3 py-2 text-sm text-gray-600">{user.email}</div>
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false)
-                  signOut()
-                }}
-                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-              >
-                Sign Out
-              </button>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <Link
+            href="/properties/new"
+            className="bg-white p-6 rounded-lg shadow hover:shadow-md transition-shadow text-center group"
+          >
+            <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-indigo-200 transition-colors">
+              <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+            </div>
+            <h3 className="font-semibold text-gray-900">Add Property</h3>
+            <p className="text-sm text-gray-600 mt-1">Add a new property to your portfolio</p>
+          </Link>
+
+          <Link
+            href="/properties"
+            className="bg-white p-6 rounded-lg shadow hover:shadow-md transition-shadow text-center group"
+          >
+            <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-emerald-200 transition-colors">
+              <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+            </div>
+            <h3 className="font-semibold text-gray-900">View Properties</h3>
+            <p className="text-sm text-gray-600 mt-1">Manage your existing properties</p>
+          </Link>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-600">Total Properties</p>
+                <p className="text-2xl font-bold text-gray-900">{properties.length}</p>
+              </div>
+              <div className="bg-indigo-100 p-3 rounded-lg">
+                <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-600">Total Investment</p>
+                <p className="text-2xl font-bold text-gray-900">€{totalInvestment.toLocaleString()}</p>
+              </div>
+              <div className="bg-emerald-100 p-3 rounded-lg">
+                <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
             </div>
           </div>
         </div>
-      )}
-    </nav>
+
+        {/* Content based on whether user has properties */}
+        {properties.length > 0 ? (
+          <div>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-semibold text-gray-900">Recent Properties</h2>
+              <Link href="/properties" className="text-sm text-indigo-600 hover:text-indigo-500">
+                View all →
+              </Link>
+            </div>
+            <div className="bg-white shadow rounded-lg overflow-hidden">
+              <div className="divide-y divide-gray-200">
+                {properties.slice(0, 3).map((property) => (
+                  <Link
+                    key={property.id}
+                    href={`/properties/${property.id}`}
+                    className="block px-6 py-4 hover:bg-gray-50 transition-colors"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium text-gray-900">{property.name}</p>
+                        <p className="text-sm text-gray-600">{property.address}, {property.city}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-medium text-gray-900">€{property.purchase_price?.toLocaleString() || 'N/A'}</p>
+                        <p className="text-sm text-gray-600 capitalize">{property.property_type || 'Property'}</p>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-white rounded-lg shadow p-8 text-center">
+            <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">Welcome to InvestiScope PPM!</h2>
+            <p className="text-gray-600 mb-6">
+              Get started by adding your first property to begin tracking your Puglia real estate portfolio.
+            </p>
+            <Link
+              href="/properties/new"
+              className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors"
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Add Your First Property
+            </Link>
+          </div>
+        )}
+
+        {/* Coming Soon Notice */}
+        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-blue-900 mb-2">🚀 More Features Coming Soon</h3>
+          <p className="text-blue-800">
+            We&apos;re actively working on project management, document storage, and team collaboration features. 
+            Stay tuned for updates!
+          </p>
+        </div>
+      </div>
+    </div>
   )
 }
