@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -12,33 +12,31 @@ export default function DashboardPage() {
   const router = useRouter()
   const supabase = createClient()
 
-  const checkUser = useCallback(async () => {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      router.push('/login')
-    } else {
-      setUser(user)
-      fetchProperties()
-    }
-  }, [router, supabase])
-
   useEffect(() => {
-    checkUser()
-  }, [checkUser])
+    async function checkUserAndFetchData() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        router.push('/login')
+      } else {
+        setUser(user)
+        
+        // Fetch properties
+        const { data, error } = await supabase
+          .from('properties')
+          .select('*')
+          .order('created_at', { ascending: false })
 
-  async function fetchProperties() {
-    const { data, error } = await supabase
-      .from('properties')
-      .select('*')
-      .order('created_at', { ascending: false })
-
-    if (error) {
-      console.error('Error fetching properties:', error)
-    } else {
-      setProperties(data || [])
+        if (error) {
+          console.error('Error fetching properties:', error)
+        } else {
+          setProperties(data || [])
+        }
+      }
+      setLoading(false)
     }
-    setLoading(false)
-  }
+
+    checkUserAndFetchData()
+  }, [router, supabase])
 
   async function signOut() {
     await supabase.auth.signOut()
