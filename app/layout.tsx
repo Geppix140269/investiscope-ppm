@@ -1,22 +1,40 @@
-// File: app/layout.tsx
-// FIXED VERSION - Removed footer that was appearing on all pages
+// app/layout.tsx
+// Updated with PWA support
 
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './global.css'
 import Navigation from './components/Navigation'
+import PWAInstallBanner, { OnlineStatusIndicator } from './components/PWAInstallBanner'
 
 const inter = Inter({ subsets: ['latin'] })
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: '#6366f1'
+}
 
 export const metadata: Metadata = {
   title: 'InvestiScope PPM - Property Project Management for Puglia',
   description: 'Professional property project management platform for international investors in Puglia, Italy. Track properties, manage renovations, and maximize Mini PIA grants.',
   keywords: 'property management puglia, italian property investment, mini pia grants, puglia real estate, property project management',
   authors: [{ name: 'InvestiScope' }],
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'InvestiScope PPM'
+  },
+  formatDetection: {
+    telephone: false
+  },
   openGraph: {
     title: 'InvestiScope PPM - Property Project Management',
     description: 'Manage your Puglia property investments with professional tools and grant integration',
-    url: 'https://ppm.investiscope.net',
+    url: 'https://investiscope.net',
     siteName: 'InvestiScope PPM',
     images: [
       {
@@ -45,9 +63,7 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
-  },
-  viewport: 'width=device-width, initial-scale=1',
-  themeColor: '#6366f1',
+  }
 }
 
 export default function RootLayout({
@@ -58,9 +74,21 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
+        {/* PWA Meta Tags */}
+        <meta name="application-name" content="InvestiScope PPM" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="InvestiScope" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        
+        {/* iOS Splash Screens */}
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/icon-152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icon-180.png" />
+        <link rel="apple-touch-icon" sizes="167x167" href="/icon-167.png" />
+        
         {/* Favicon */}
         <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         
@@ -72,27 +100,16 @@ export default function RootLayout({
         {/* Navigation */}
         <Navigation />
         
+        {/* Online Status Indicator */}
+        <OnlineStatusIndicator />
+        
         {/* Main Content - Added pt-16 to account for fixed navigation */}
         <main className="min-h-screen pt-16">
           {children}
         </main>
         
-        {/* Footer removed - it should only be on specific pages like home, not global */}
-        
-        {/* Scripts */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              // Add smooth scroll behavior
-              document.documentElement.style.scrollBehavior = 'smooth';
-              
-              // Add loading animation
-              window.addEventListener('load', function() {
-                document.body.classList.add('loaded');
-              });
-            `,
-          }}
-        />
+        {/* PWA Install Banner */}
+        <PWAInstallBanner />
       </body>
     </html>
   )
