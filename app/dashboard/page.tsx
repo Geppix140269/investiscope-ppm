@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -12,11 +12,7 @@ export default function DashboardPage() {
   const router = useRouter()
   const supabase = createClient()
 
-  useEffect(() => {
-    checkUser()
-  }, [])
-
-  async function checkUser() {
+  const checkUser = useCallback(async () => {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       router.push('/login')
@@ -24,7 +20,11 @@ export default function DashboardPage() {
       setUser(user)
       fetchProperties()
     }
-  }
+  }, [router, supabase])
+
+  useEffect(() => {
+    checkUser()
+  }, [checkUser])
 
   async function fetchProperties() {
     const { data, error } = await supabase
@@ -154,7 +154,7 @@ export default function DashboardPage() {
               ))
             ) : (
               <div className="col-span-full text-center py-12 text-gray-500">
-                <p>Nessuna proprietà aggiunta. Clicca "Aggiungi Nuova Proprietà" per iniziare!</p>
+                <p>Nessuna proprietà aggiunta. Clicca &quot;Aggiungi Nuova Proprietà&quot; per iniziare!</p>
               </div>
             )}
           </div>
@@ -186,7 +186,7 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-white rounded p-4">
               <h4 className="font-medium mb-2">📋 Documenti Necessari</h4>
-              <p className="text-sm text-gray-600">Checklist completa per l'acquisto immobiliare in Italia</p>
+              <p className="text-sm text-gray-600">Checklist completa per l&apos;acquisto immobiliare in Italia</p>
             </div>
             <div className="bg-white rounded p-4">
               <h4 className="font-medium mb-2">🏛️ Permessi e Pratiche</h4>
