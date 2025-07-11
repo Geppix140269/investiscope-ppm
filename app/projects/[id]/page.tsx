@@ -1,9 +1,4 @@
-</div>
-        </div>
-      </main>
-    </div>
-  )
-}'use client'
+'use client'
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
@@ -584,3 +579,9 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      </main>
+    </div>
+  )
+}
