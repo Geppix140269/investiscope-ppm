@@ -2,7 +2,9 @@
 import { Resend } from 'resend'
 
 // Initialize Resend with API key from environment
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Use a dummy key during build time if not available
+const resendApiKey = process.env.RESEND_API_KEY || 'dummy_key_for_build'
+const resend = new Resend(resendApiKey)
 
 // Email templates
 export const emailTemplates = {
@@ -160,6 +162,12 @@ export const emailTemplates = {
 // Send email function
 export async function sendEmail(to: string, template: { subject: string; html: string; text: string }) {
   try {
+    // Check if we have a real API key
+    if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === 'dummy_key_for_build') {
+      console.warn('Resend API key not configured. Email not sent.')
+      return { success: false, error: 'Email service not configured' }
+    }
+
     const data = await resend.emails.send({
       from: 'InvestiScope PPM <noreply@investiscope.net>',
       to: [to],
@@ -186,7 +194,7 @@ export async function sendTeamInvitationEmail(
     token: string
   }
 ) {
-  const inviteUrl = `${process.env.NEXT_PUBLIC_APP_URL}/team/accept/${inviteData.token}`
+  const inviteUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://investiscope.net'}/team/accept/${inviteData.token}`
   
   const template = emailTemplates.teamInvitation({
     ...inviteData,
