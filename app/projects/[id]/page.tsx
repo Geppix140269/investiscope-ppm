@@ -1,4 +1,9 @@
-'use client'
+</div>
+        </div>
+      </main>
+    </div>
+  )
+}'use client'
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
@@ -505,3 +510,77 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
 
             {/* Documents Tab */}
             {activeTab === 'documents' && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Upload Document</h3>
+                  <DocumentUpload
+                    propertyId={property.id}
+                    projectId={params.id}
+                    onUploadComplete={() => setRefreshDocuments(prev => prev + 1)}
+                  />
+                </div>
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Project Documents</h3>
+                  <DocumentsList
+                    propertyId={property.id}
+                    projectId={params.id}
+                    refreshTrigger={refreshDocuments}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Expenses Tab */}
+            {activeTab === 'expenses' && (
+              <div>
+                <div className="mb-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Budget Overview</h3>
+                  <div className="bg-gray-50 rounded-lg p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">Total Budget</p>
+                        <p className="text-2xl font-bold text-gray-900">
+                          €{project.budget?.toLocaleString() || '0'}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">Spent</p>
+                        <p className="text-2xl font-bold text-gray-900">
+                          €{project.spent?.toLocaleString() || '0'}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">Remaining</p>
+                        <p className="text-2xl font-bold text-green-600">
+                          €{((project.budget || 0) - (project.spent || 0)).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="mt-4">
+                      <div className="w-full bg-gray-200 rounded-full h-4">
+                        <div 
+                          className={`h-4 rounded-full ${
+                            calculateBudgetUsed() > 90 ? 'bg-red-500' : 
+                            calculateBudgetUsed() > 75 ? 'bg-yellow-500' : 
+                            'bg-green-500'
+                          }`}
+                          style={{ width: `${calculateBudgetUsed()}%` }}
+                        ></div>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-2">{calculateBudgetUsed()}% of budget used</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-center py-8 bg-gray-50 rounded-lg">
+                  <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  </svg>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">Expense Tracking Coming Soon</h3>
+                  <p className="text-gray-600 mb-4">Track invoices, receipts, and detailed expenses</p>
+                  <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700">
+                    Get Notified When Available
+                  </button>
+                </div>
+              </div>
+            )}
