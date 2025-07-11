@@ -1,7 +1,7 @@
 // app/components/PWAInstallBanner.tsx
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { usePWA } from '@/lib/hooks/usePWA'
 
 export default function PWAInstallBanner() {
@@ -62,7 +62,7 @@ export function OnlineStatusIndicator() {
   return (
     <div className="fixed top-16 left-0 right-0 bg-yellow-500 text-white p-2 text-center z-40">
       <p className="text-sm font-medium">
-        You're offline - Some features may be limited
+        You&apos;re offline - Some features may be limited
       </p>
     </div>
   )
