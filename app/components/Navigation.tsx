@@ -1,6 +1,3 @@
-// File: app/components/Navigation.tsx
-// SIMPLIFIED VERSION - Only includes working features
-
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -19,7 +16,6 @@ export default function Navigation() {
   useEffect(() => {
     checkUser()
     
-    // Subscribe to auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
     })
@@ -38,17 +34,16 @@ export default function Navigation() {
     router.push('/')
   }
 
-  // ONLY INCLUDE WORKING PAGES
+  // Full navigation with all modules
   const navigation = [
     { name: 'Dashboard', href: '/dashboard' },
     { name: 'Properties', href: '/properties' },
-    // Projects - removed until fully working
-    // Documents - removed until working
-    // Team - removed until working
+    { name: 'Projects', href: '/projects' },
+    { name: 'Documents', href: '/documents' },
+    { name: 'Team', href: '/team' },
   ]
 
-  // Don't show navigation on auth pages
-  const authPages = ['/login', '/register', '/']
+  const authPages = ['/', '/login', '/register']
   const isAuthPage = authPages.includes(pathname)
 
   if (loading) return null
@@ -58,14 +53,14 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            {/* Logo */}
+            {/* Logo - Always links to home */}
             <Link href="/" className="flex items-center">
               <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 bg-clip-text text-transparent">
                 InvestiScope PPM
               </h1>
             </Link>
 
-            {/* Desktop Navigation - Only show if logged in */}
+            {/* Desktop Navigation */}
             {user && !isAuthPage && (
               <div className="hidden md:ml-8 md:flex md:space-x-4">
                 {navigation.map((item) => (
