@@ -1,9 +1,19 @@
 // app/api/send-invite/route.ts
 import { NextResponse } from 'next/server'
-import { sendTeamInvitationEmail } from '@/lib/email/resend'
 
 export async function POST(request: Request) {
   try {
+    // Check if email service is configured
+    if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === 'dummy_key_for_build') {
+      return NextResponse.json(
+        { error: 'Email service not configured. Please add RESEND_API_KEY to environment variables.' },
+        { status: 503 }
+      )
+    }
+
+    // Dynamically import to avoid build-time errors
+    const { sendTeamInvitationEmail } = await import('@/lib/email/resend')
+    
     const body = await request.json()
     const { to, propertyName, inviterName, inviterEmail, role, token } = body
 
