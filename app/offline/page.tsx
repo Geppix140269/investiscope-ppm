@@ -1,4 +1,5 @@
-// app/offline/page.tsx
+'use client'
+
 export default function OfflinePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-emerald-50 flex items-center justify-center px-4">
@@ -36,12 +37,12 @@ export default function OfflinePage() {
           </div>
         </div>
         
-        <button
-          onClick={() => window.location.reload()}
-          className="mt-8 bg-gradient-to-r from-indigo-600 to-emerald-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
+        
+          href="/"
+          className="mt-8 inline-block bg-gradient-to-r from-indigo-600 to-emerald-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
         >
           Try Again
-        </button>
+        </a>
       </div>
     </div>
   )
