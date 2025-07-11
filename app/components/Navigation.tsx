@@ -1,5 +1,4 @@
 // File: app/components/Navigation.tsx
-// Note: This file needs to be RENAMED from navigation.tsx to Navigation.tsx (capital N)
 
 'use client'
 
@@ -38,12 +37,13 @@ export default function Navigation() {
     router.push('/')
   }
 
-  // Only show these navigation items if user is logged in
+  // Navigation items for logged in users
   const navigation = [
     { name: 'Dashboard', href: '/dashboard' },
     { name: 'Properties', href: '/properties' },
-    // Remove Projects link until pages are created
-    // { name: 'Projects', href: '/projects' },
+    { name: 'Projects', href: '/projects' },
+    { name: 'Documents', href: '/documents' },
+    { name: 'Team', href: '/team' },
   ]
 
   // Don't show navigation on auth pages
@@ -57,8 +57,8 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            {/* Logo */}
-            <Link href={user ? '/dashboard' : '/'} className="flex items-center">
+            {/* Logo - Always goes to home page */}
+            <Link href="/" className="flex items-center">
               <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 bg-clip-text text-transparent">
                 InvestiScope PPM
               </h1>
