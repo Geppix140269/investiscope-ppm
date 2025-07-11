@@ -1,5 +1,18 @@
 import { createClient } from '@/lib/supabase/client'
 
+export type DocumentCategory =
+  | 'invoice'
+  | 'contract'
+  | 'permit'
+  | 'quote'
+  | 'receipt'
+  | 'plan'
+  | 'report'
+  | 'certificate'
+  | 'grant_application'
+  | 'other'
+  | 'photo'
+
 interface DocumentMetadata {
   category?: string
   extractedData?: {
