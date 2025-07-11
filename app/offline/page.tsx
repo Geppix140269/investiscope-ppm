@@ -11,9 +11,9 @@ export default function OfflinePage() {
           </div>
         </div>
         
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">You're Offline</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-4">You&apos;re Offline</h1>
         <p className="text-gray-600 mb-8">
-          Don't worry! Your work is saved locally and will sync when you're back online.
+          Don&apos;t worry! Your work is saved locally and will sync when you&apos;re back online.
         </p>
         
         <div className="space-y-4">
