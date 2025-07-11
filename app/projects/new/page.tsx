@@ -1,5 +1,5 @@
 // app/projects/new/page.tsx
-// Updated with project templates
+// Updated with project templates - FIXED SYNTAX ERROR
 
 'use client'
 
@@ -264,6 +264,20 @@ export default function NewProjectPage() {
                   value={formData.name}
                   onChange={handleChange}
                   className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  placeholder="e.g., Kitchen Renovation, Roof Repair"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description
+                </label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows={4}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   placeholder="Describe the scope of work, objectives, and any special requirements..."
                 />
               </div>
@@ -493,17 +507,3 @@ export default function NewProjectPage() {
     </div>
   )
 }
-                  placeholder="e.g., Kitchen Renovation, Roof Repair"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description
-                </label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  rows={4}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
