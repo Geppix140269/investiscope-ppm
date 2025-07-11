@@ -26,7 +26,7 @@ export default function SmartDocumentUpload({ propertyId, projectId, onUploadCom
 
       const result = await analyzer.analyzeDocument(file)
       setAnalysis(result)
-      setCategory(result.category as DocumentCategory) // ✅ type cast fix
+      setCategory(result.category as DocumentCategory)
       setExtractedData(result.extractedData)
     }
   }
@@ -95,7 +95,7 @@ export default function SmartDocumentUpload({ propertyId, projectId, onUploadCom
     receipt: '🧾',
     plan: '📐',
     report: '📊',
-    certification: '📋',
+    certificate: '📋',
     grant_application: '🎯',
     other: '📄',
     photo: '🖼️'
@@ -109,7 +109,7 @@ export default function SmartDocumentUpload({ propertyId, projectId, onUploadCom
     receipt: 'bg-gray-100 text-gray-800 border-gray-200',
     plan: 'bg-indigo-100 text-indigo-800 border-indigo-200',
     report: 'bg-pink-100 text-pink-800 border-pink-200',
-    certification: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    certificate: 'bg-emerald-100 text-emerald-800 border-emerald-200',
     grant_application: 'bg-red-100 text-red-800 border-red-200',
     other: 'bg-gray-100 text-gray-800 border-gray-200',
     photo: 'bg-cyan-100 text-cyan-800 border-cyan-200'
