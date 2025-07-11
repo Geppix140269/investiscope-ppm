@@ -19,7 +19,9 @@ export default function NewProjectPage() {
     start_date: '',
     end_date: '',
     project_type: 'renovation',
-    priority: 'medium'
+    priority: 'medium',
+    grant_type: 'none',
+    country: 'IT'
   })
 
   useEffect(() => {
@@ -69,6 +71,8 @@ export default function NewProjectPage() {
       metadata: {
         project_type: formData.project_type,
         priority: formData.priority,
+        grant_type: formData.grant_type,
+        country: formData.country,
         created_by: user.email
       }
     }
@@ -313,6 +317,55 @@ export default function NewProjectPage() {
                       Math.ceil((new Date(formData.end_date).getTime() - new Date(formData.start_date).getTime()) / (1000 * 60 * 60 * 24))
                     } days
                   </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Grant/Funding Section */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Grants & Funding</h2>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Are you applying for any grants?
+                </label>
+                <select
+                  name="grant_type"
+                  value={formData.grant_type}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                >
+                  <option value="none">No grants</option>
+                  <option value="mini_pia">Mini PIA (Puglia, Italy)</option>
+                  <option value="superbonus">Superbonus 110% (Italy)</option>
+                  <option value="ecobonus">Ecobonus (Italy)</option>
+                  <option value="renovation_bonus">Renovation Bonus (Italy)</option>
+                  <option value="eu_funds">EU Regional Development Funds</option>
+                  <option value="other">Other Grant Program</option>
+                </select>
+              </div>
+
+              {formData.grant_type !== 'none' && (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <h4 className="flex items-center gap-2 font-medium text-yellow-800 mb-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Grant Documentation Requirements
+                  </h4>
+                  <p className="text-sm text-yellow-700 mb-2">
+                    You'll need to maintain proper documentation for grant compliance.
+                  </p>
+                  <Link
+                    href="https://investiscope.net/calculator"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-yellow-800 font-medium hover:text-yellow-900"
+                  >
+                    Calculate potential grant amount →
+                  </Link>
                 </div>
               )}
             </div>
