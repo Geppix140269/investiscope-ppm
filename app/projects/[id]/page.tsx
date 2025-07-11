@@ -215,6 +215,14 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
               >
                 Edit Project
               </Link>
+              {project.metadata?.grant_type && project.metadata.grant_type !== 'none' && (
+                <Link
+                  href={`/projects/${params.id}/grant-compliance`}
+                  className="bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  Grant Compliance
+                </Link>
+              )}
               <button
                 onClick={handleDeleteProject}
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
