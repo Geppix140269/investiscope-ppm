@@ -75,7 +75,7 @@ export default function DashboardPage() {
                 Welcome to Your Italian Property Journey
               </h1>
               <p className="text-gray-600 mt-2">
-                Let's find your perfect property in Italy. We'll guide you every step of the way.
+                Let&apos;s find your perfect property in Italy. We&apos;ll guide you every step of the way.
               </p>
             </div>
             <div className="hidden lg:block bg-indigo-100 rounded-lg p-4">
