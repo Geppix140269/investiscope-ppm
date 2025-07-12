@@ -1,27 +1,31 @@
 // File: app/dashboard/page.tsx
+
 'use client'
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import BuyerDashboard from './buyer-dashboard'
 import OwnerDashboard from './owner-dashboard'
+import { ToggleLeft, ToggleRight } from 'lucide-react'
 
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null)
-  const [userType, setUserType] = useState<'buyer' | 'owner' | 'both' | null>(null)
   const [loading, setLoading] = useState(true)
-  const [dashboardMode, setDashboardMode] = useState<'buyer' | 'owner'>('buyer')
+  const [dashboardMode, setDashboardMode] = useState<'buyer' | 'owner' | null>(null)
+  const [showModeSwitcher, setShowModeSwitcher] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
   useEffect(() => {
-    checkUserAndDetermineType()
+    checkUserAndDetermineMode()
   }, [])
 
-  async function checkUserAndDetermineType() {
+  async function checkUserAndDetermineMode() {
     try {
       const { data: { user } } = await supabase.auth.getUser()
+      
       if (!user) {
         router.push('/login')
         return
@@ -29,39 +33,47 @@ export default function DashboardPage() {
       
       setUser(user)
       
-      // Check if user owns any properties
+      // Check if user has properties to determine their mode
       const { data: properties } = await supabase
         .from('properties')
-        .select('id, status')
-        .eq('user_id', user.id)
+        .select('id')
+        .limit(1)
 
-      if (!properties || properties.length === 0) {
-        setUserType('buyer')
-        setDashboardMode('buyer')
+      const hasProperties = properties && properties.length > 0
+
+      // Check user's preferred mode from profile
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('user_mode')
+        .eq('id', user.id)
+        .single()
+
+      if (profile?.user_mode) {
+        setDashboardMode(profile.user_mode)
+        // Show switcher if they have properties (can be both buyer and owner)
+        setShowModeSwitcher(hasProperties)
       } else {
-        const ownedProperties = properties.filter(p => 
-          !p.status || p.status === 'owned'
-        )
-        const wishlistProperties = properties.filter(p => 
-          p.status && p.status !== 'owned'
-        )
-        
-        if (ownedProperties.length > 0 && wishlistProperties.length > 0) {
-          setUserType('both')
-          // Default to owner view if they have owned properties
-          setDashboardMode('owner')
-        } else if (ownedProperties.length > 0) {
-          setUserType('owner')
-          setDashboardMode('owner')
-        } else {
-          setUserType('buyer')
-          setDashboardMode('buyer')
-        }
+        // Auto-determine based on whether they have properties
+        setDashboardMode(hasProperties ? 'owner' : 'buyer')
+        setShowModeSwitcher(hasProperties)
       }
     } catch (error) {
       console.error('Dashboard error:', error)
+      router.push('/login')
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function handleModeSwitch(newMode: 'buyer' | 'owner') {
+    setDashboardMode(newMode)
+    
+    // Save preference to profile
+    if (user) {
+      await supabase
+        .from('profiles')
+        .update({ user_mode: newMode })
+        .eq('id', user.id)
     }
   }
 
@@ -69,8 +81,33 @@ export default function DashboardPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading your dashboard...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!dashboardMode) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Welcome to InvestiScope!</h1>
+          <p className="text-gray-600 mb-8">Choose how you'd like to use the platform:</p>
+          <div className="flex gap-4 justify-center">
+            <button
+              onClick={() => handleModeSwitch('buyer')}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              I'm Looking to Buy
+            </button>
+            <button
+              onClick={() => handleModeSwitch('owner')}
+              className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              I Own Property
+            </button>
+          </div>
         </div>
       </div>
     )
@@ -78,46 +115,45 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header with mode switcher */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-light text-gray-900">Dashboard</h1>
-            
-            {userType === 'both' && (
-              <div className="flex items-center gap-2 bg-gray-100 p-1 rounded-lg">
+      {/* Mode Switcher */}
+      {showModeSwitcher && (
+        <div className="bg-white shadow-sm border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-gray-600">Dashboard Mode:</p>
+              <div className="flex items-center bg-gray-100 rounded-lg p-1">
                 <button
-                  onClick={() => setDashboardMode('buyer')}
+                  onClick={() => handleModeSwitch('buyer')}
                   className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                    dashboardMode === 'buyer' 
-                      ? 'bg-white text-gray-900 shadow-sm' 
+                    dashboardMode === 'buyer'
+                      ? 'bg-white text-gray-900 shadow-sm'
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
-                  Buyer Mode
+                  Buyer View
                 </button>
                 <button
-                  onClick={() => setDashboardMode('owner')}
+                  onClick={() => handleModeSwitch('owner')}
                   className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                    dashboardMode === 'owner' 
-                      ? 'bg-white text-gray-900 shadow-sm' 
+                    dashboardMode === 'owner'
+                      ? 'bg-white text-gray-900 shadow-sm'
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
-                  Owner Mode
+                  Owner View
                 </button>
               </div>
-            )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Dashboard Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {dashboardMode === 'buyer' ? (
-          <BuyerDashboard user={user} />
+          <BuyerDashboard />
         ) : (
-          <OwnerDashboard user={user} />
+          <OwnerDashboard />
         )}
       </div>
     </div>
