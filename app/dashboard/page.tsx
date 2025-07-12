@@ -88,7 +88,7 @@ export default function DashboardPage() {
     )
   }
 
-  if (!dashboardMode) {
+  if (!dashboardMode || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
@@ -153,7 +153,7 @@ export default function DashboardPage() {
         {dashboardMode === 'buyer' ? (
           <BuyerDashboard />
         ) : (
-          <OwnerDashboard />
+          <OwnerDashboard user={user} />
         )}
       </div>
     </div>
