@@ -231,3 +231,33 @@ export async function canUserPerformAction(
 /*
 export function PropertyComparisonTool() {
   return (
+    <FeatureGate feature="propertyComparison">
+      <div>
+        {/* Your comparison tool UI here */}
+      </div>
+    </FeatureGate>
+  )
+}
+
+export function SavePropertyButton({ propertyId }: { propertyId: string }) {
+  const { hasFeature, getFeatureLimit } = useSubscription()
+  const [savedCount, setSavedCount] = useState(0)
+  
+  const maxSaved = getFeatureLimit('maxSavedProperties') as number
+  const canSave = savedCount < maxSaved
+  
+  if (!canSave && !hasFeature('maxSavedProperties')) {
+    return (
+      <button className="px-4 py-2 bg-gray-200 text-gray-500 rounded-lg cursor-not-allowed">
+        Limit Reached ({maxSaved} properties)
+      </button>
+    )
+  }
+  
+  return (
+    <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+      Save Property
+    </button>
+  )
+}
+*/
