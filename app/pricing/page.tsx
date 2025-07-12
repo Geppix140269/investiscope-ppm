@@ -3,10 +3,6 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Check, X, Zap, Shield, Globe, HeadphonesIcon, TrendingUp, Users } from 'lucide-react'
-import { loadStripe } from '@stripe/stripe-js'
-
-// Initialize Stripe (you'll need to add your publishable key)
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '')
 
 const plans = [
   {
@@ -42,7 +38,7 @@ const plans = [
     currency: '€',
     interval: 'month',
     popular: true,
-    stripeProductId: 'price_premium_monthly', // Replace with actual Stripe price ID
+    stripeProductId: 'price_premium_monthly', // For future use
     features: [
       { text: 'Everything in Basic', included: true },
       { text: 'Unlimited saved properties', included: true },
@@ -68,7 +64,7 @@ const plans = [
     currency: '€',
     interval: 'month',
     popular: false,
-    stripeProductId: 'price_professional_monthly', // Replace with actual Stripe price ID
+    stripeProductId: 'price_professional_monthly', // For future use
     features: [
       { text: 'Everything in Premium', included: true },
       { text: 'List unlimited properties', included: true },
@@ -105,36 +101,10 @@ export default function PricingPage() {
 
     setLoading(planId)
 
-    try {
-      // In a real app, you would call your backend to create a checkout session
-      const response = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          priceId: stripeProductId,
-          mode: 'subscription',
-          billingInterval,
-        }),
-      })
-
-      const { sessionId } = await response.json()
-      
-      const stripe = await stripePromise
-      if (stripe) {
-        const { error } = await stripe.redirectToCheckout({ sessionId })
-        if (error) {
-          console.error('Stripe checkout error:', error)
-          alert('Something went wrong. Please try again.')
-        }
-      }
-    } catch (error) {
-      console.error('Checkout error:', error)
-      alert('Something went wrong. Please try again.')
-    } finally {
-      setLoading(null)
-    }
+    // For now, just redirect to a coming soon page
+    // In production, this would integrate with Stripe
+    alert('Payment integration coming soon! For now, please contact us at support@investiscope.net')
+    setLoading(null)
   }
 
   return (
@@ -262,7 +232,7 @@ export default function PricingPage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Secure & Reliable</h3>
               <p className="text-gray-600">
-                Bank-level security with SSL encryption and secure payment processing through Stripe
+                Bank-level security with SSL encryption and secure payment processing
               </p>
             </div>
 
@@ -314,14 +284,14 @@ export default function PricingPage() {
             <div className="bg-white rounded-lg p-6">
               <h3 className="font-semibold text-lg mb-2">What payment methods do you accept?</h3>
               <p className="text-gray-600">
-                We accept all major credit cards, debit cards, and PayPal through our secure Stripe integration.
+                We accept all major credit cards, debit cards, and PayPal through our secure payment processing.
               </p>
             </div>
 
             <div className="bg-white rounded-lg p-6">
               <h3 className="font-semibold text-lg mb-2">Can I cancel my subscription?</h3>
               <p className="text-gray-600">
-                You can cancel your subscription at any time. You'll continue to have access until the end of your billing period.
+                You can cancel your subscription at any time. You&apos;ll continue to have access until the end of your billing period.
               </p>
             </div>
           </div>
