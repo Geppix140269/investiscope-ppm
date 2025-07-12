@@ -9,7 +9,6 @@ import {
   Users, BookOpen, CreditCard, TrendingUp, Bell, Settings,
   ChevronDown
 } from 'lucide-react'
-import { useSubscription } from '@/lib/subscription'
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
@@ -17,9 +16,9 @@ export default function Navigation() {
   const [showUserMenu, setShowUserMenu] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [userMode, setUserMode] = useState<'buyer' | 'owner'>('buyer')
+  const [subscriptionTier, setSubscriptionTier] = useState<string>('free')
   const pathname = usePathname()
   const supabase = createClient()
-  const { subscriptionTier } = useSubscription()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,12 +38,15 @@ export default function Navigation() {
       if (user) {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('user_mode')
+          .select('user_mode, subscription_tier')
           .eq('id', user.id)
           .single()
         
         if (profile?.user_mode) {
           setUserMode(profile.user_mode)
+        }
+        if (profile?.subscription_tier) {
+          setSubscriptionTier(profile.subscription_tier)
         }
       }
     }
