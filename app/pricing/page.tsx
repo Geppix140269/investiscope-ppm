@@ -1,3 +1,5 @@
+// File: app/pricing/page.tsx
+
 'use client'
 
 import { useState } from 'react'
