@@ -9,17 +9,17 @@ export interface SubscriptionFeatures {
   propertyComparison: boolean
   propertyValuation: boolean
   exclusiveListings: boolean
-  
+
   // Analytics Features
   marketAnalytics: boolean
   investmentCalculator: boolean
   downloadableReports: boolean
-  
+
   // Communication Features
   directMessaging: boolean
   prioritySupport: boolean
   emailAlerts: 'weekly' | 'daily' | 'realtime'
-  
+
   // Professional Features
   listProperties: boolean
   leadManagement: boolean
@@ -102,14 +102,13 @@ export function useSubscription() {
     async function fetchSubscription() {
       try {
         const { data: { user } } = await supabase.auth.getUser()
-        
+
         if (!user) {
           setSubscriptionTier('free')
           setLoading(false)
           return
         }
 
-        // Fetch user's subscription from your database
         const { data: profile } = await supabase
           .from('profiles')
           .select('subscription_tier, subscription_status')
@@ -212,7 +211,7 @@ export async function canUserPerformAction(
   action: keyof SubscriptionFeatures
 ): Promise<boolean> {
   const supabase = createClient()
-  
+
   const { data: profile } = await supabase
     .from('profiles')
     .select('subscription_tier, subscription_status')
@@ -228,12 +227,11 @@ export async function canUserPerformAction(
 }
 
 // Example usage in a component:
-/*
 export function PropertyComparisonTool() {
   return (
     <FeatureGate feature="propertyComparison">
       <div>
-        {/* Your comparison tool UI here */}
+        {/* Replace this with your comparison tool UI */}
       </div>
     </FeatureGate>
   )
@@ -242,10 +240,10 @@ export function PropertyComparisonTool() {
 export function SavePropertyButton({ propertyId }: { propertyId: string }) {
   const { hasFeature, getFeatureLimit } = useSubscription()
   const [savedCount, setSavedCount] = useState(0)
-  
+
   const maxSaved = getFeatureLimit('maxSavedProperties') as number
   const canSave = savedCount < maxSaved
-  
+
   if (!canSave && !hasFeature('maxSavedProperties')) {
     return (
       <button className="px-4 py-2 bg-gray-200 text-gray-500 rounded-lg cursor-not-allowed">
@@ -253,11 +251,10 @@ export function SavePropertyButton({ propertyId }: { propertyId: string }) {
       </button>
     )
   }
-  
+
   return (
     <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
       Save Property
     </button>
   )
 }
-*/
