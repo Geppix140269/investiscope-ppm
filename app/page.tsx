@@ -3,19 +3,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, CheckCircle, Globe, Shield, Users, FileText, Calculator, Search, Star, ArrowRight, Menu, X, Phone, Mail, MapPin, Building2, Briefcase, Home, TrendingUp, Clock, Award, ChevronDown } from 'lucide-react';
+import Link from 'next/link';
 
 export default function HomePage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -103,55 +94,8 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
-      {/* Navigation - Professional, minimal */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-sm' : 'bg-transparent'}`}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex justify-between items-center h-20">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-light tracking-wide">
-                InvestiScope<span className="text-gray-400 ml-2">Italy</span>
-              </h1>
-            </div>
-            
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#services" className="text-gray-700 hover:text-gray-900 transition-colors">Services</a>
-              <a href="#process" className="text-gray-700 hover:text-gray-900 transition-colors">Process</a>
-              <a href="#professionals" className="text-gray-700 hover:text-gray-900 transition-colors">Professionals</a>
-              <a href="#resources" className="text-gray-700 hover:text-gray-900 transition-colors">Resources</a>
-              <a href="/login" className="text-gray-700 hover:text-gray-900 transition-colors">Sign In</a>
-              <a href="/register" className="bg-gray-900 text-white px-6 py-2.5 hover:bg-gray-800 transition-colors">
-                Get Started
-              </a>
-            </div>
-
-            <button 
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t">
-            <div className="px-6 py-4 space-y-3">
-              <a href="#services" className="block py-2 text-gray-700">Services</a>
-              <a href="#process" className="block py-2 text-gray-700">Process</a>
-              <a href="#professionals" className="block py-2 text-gray-700">Professionals</a>
-              <a href="#resources" className="block py-2 text-gray-700">Resources</a>
-              <a href="/login" className="block py-2 text-gray-700">Sign In</a>
-              <a href="/register" className="block w-full bg-gray-900 text-white px-6 py-3 text-center">
-                Get Started
-              </a>
-            </div>
-          </div>
-        )}
-      </nav>
-
       {/* Hero - Sophisticated, minimal */}
-      <section className="relative min-h-screen flex items-center">
+      <section className="relative min-h-screen flex items-center pt-16">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white"></div>
         <div className="relative max-w-7xl mx-auto px-6 py-24">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -166,10 +110,10 @@ export default function HomePage() {
                 international investors need to succeed.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <a href="/register" className="inline-flex items-center justify-center bg-gray-900 text-white px-8 py-4 hover:bg-gray-800 transition-colors group">
+                <Link href="/register" className="inline-flex items-center justify-center bg-gray-900 text-white px-8 py-4 hover:bg-gray-800 transition-colors group">
                   Start Your Journey
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                </a>
+                </Link>
                 <a href="#services" className="inline-flex items-center justify-center border border-gray-300 px-8 py-4 hover:border-gray-400 transition-colors">
                   Learn More
                 </a>
@@ -186,12 +130,14 @@ export default function HomePage() {
               </div>
             </div>
             <div className="relative">
-              <div className="bg-gray-100 aspect-[4/3] overflow-hidden">
-                <div className="h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-                  <Building2 className="w-24 h-24 text-gray-400" />
-                </div>
+              <div className="aspect-[4/3] overflow-hidden rounded-lg shadow-2xl">
+                <img 
+                  src="https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=800&h=600&fit=crop" 
+                  alt="Italian villa with countryside view"
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <div className="absolute -bottom-6 -left-6 bg-white p-6 shadow-lg">
+              <div className="absolute -bottom-6 -left-6 bg-white p-6 shadow-lg rounded-lg">
                 <div className="text-3xl font-light mb-1">€2.4M+</div>
                 <div className="text-sm text-gray-600">Average Property Value</div>
               </div>
@@ -275,7 +221,7 @@ export default function HomePage() {
                   idx === activeTestimonial ? 'opacity-100' : 'opacity-0 absolute inset-0'
                 }`}
               >
-                <div className="bg-gray-50 p-12">
+                <div className="bg-gray-50 p-12 rounded-lg">
                   <p className="text-xl leading-relaxed mb-8 italic">
                     &ldquo;{testimonial.text}&rdquo;
                   </p>
@@ -304,6 +250,45 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Special PPM Section */}
+      <section className="py-24 bg-gradient-to-br from-indigo-50 to-emerald-50">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <div className="inline-flex items-center bg-white px-4 py-2 rounded-full shadow-sm mb-6">
+            <span className="text-sm font-medium text-gray-700">New</span>
+            <span className="ml-2 text-sm text-indigo-600">Property Project Management Platform</span>
+          </div>
+          <h3 className="text-4xl font-light mb-6">Introducing InvestiScope PPM</h3>
+          <p className="text-xl text-gray-600 mb-8">
+            Manage your Italian property renovations and projects with our comprehensive 
+            project management platform designed specifically for international investors.
+          </p>
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <div className="text-indigo-600 mb-3">📊</div>
+              <h4 className="font-medium mb-2">Project Tracking</h4>
+              <p className="text-sm text-gray-600">Monitor timelines, budgets, and milestones</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <div className="text-emerald-600 mb-3">💶</div>
+              <h4 className="font-medium mb-2">Grant Management</h4>
+              <p className="text-sm text-gray-600">Track Mini PIA and other Italian grants</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <div className="text-purple-600 mb-3">👥</div>
+              <h4 className="font-medium mb-2">Team Collaboration</h4>
+              <p className="text-sm text-gray-600">Coordinate with contractors and professionals</p>
+            </div>
+          </div>
+          <Link 
+            href="/register" 
+            className="inline-flex items-center bg-indigo-600 text-white px-8 py-4 rounded-lg hover:bg-indigo-700 transition-colors"
+          >
+            Access PPM Platform
+            <ArrowRight className="w-5 h-5 ml-2" />
+          </Link>
+        </div>
+      </section>
+
       {/* CTA - Professional, clear */}
       <section className="py-24 bg-gray-900 text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
@@ -312,12 +297,12 @@ export default function HomePage() {
             Join hundreds of international investors who have successfully navigated the Italian property market with our guidance.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/register" className="inline-flex items-center justify-center bg-white text-gray-900 px-8 py-4 hover:bg-gray-100 transition-colors">
+            <Link href="/register" className="inline-flex items-center justify-center bg-white text-gray-900 px-8 py-4 hover:bg-gray-100 transition-colors">
               Schedule Consultation
-            </a>
-            <a href="/contact" className="inline-flex items-center justify-center border border-gray-700 px-8 py-4 hover:border-gray-500 transition-colors">
+            </Link>
+            <Link href="/contact" className="inline-flex items-center justify-center border border-gray-700 px-8 py-4 hover:border-gray-500 transition-colors">
               Contact Our Experts
-            </a>
+            </Link>
           </div>
         </div>
       </section>
