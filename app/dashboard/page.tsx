@@ -51,11 +51,11 @@ export default function DashboardPage() {
       if (profile?.user_mode) {
         setDashboardMode(profile.user_mode)
         // Show switcher if they have properties (can be both buyer and owner)
-        setShowModeSwitcher(hasProperties)
+        setShowModeSwitcher(!!hasProperties) // Convert to boolean
       } else {
         // Auto-determine based on whether they have properties
         setDashboardMode(hasProperties ? 'owner' : 'buyer')
-        setShowModeSwitcher(hasProperties)
+        setShowModeSwitcher(!!hasProperties) // Convert to boolean
       }
     } catch (error) {
       console.error('Dashboard error:', error)
