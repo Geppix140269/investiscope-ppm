@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { ArrowRight, Check, Shield, Users, TrendingUp, Clock, Award, Globe } from 'lucide-react'
 
 export default function Home() {
   return (
@@ -38,7 +37,9 @@ export default function Home() {
             <div className="max-w-3xl">
               {/* Trust Badge */}
               <div className="inline-flex items-center space-x-2 bg-indigo-50 border border-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                <Shield className="w-4 h-4" />
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
                 <span>Trusted by 500+ Property Investors in Italy</span>
               </div>
               
@@ -61,7 +62,9 @@ export default function Home() {
                   className="inline-flex items-center justify-center px-8 py-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
                 >
                   Start Free 14-Day Trial
-                  <ArrowRight className="ml-2 w-5 h-5" />
+                  <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </Link>
                 <Link 
                   href="/demo"
@@ -75,15 +78,21 @@ export default function Home() {
               {/* Trust Indicators */}
               <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600">
                 <div className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-2" />
+                  <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
                   <span>No credit card required</span>
                 </div>
                 <div className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-2" />
+                  <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
                   <span>GDPR compliant</span>
                 </div>
                 <div className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-2" />
+                  <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
                   <span>Cancel anytime</span>
                 </div>
               </div>
@@ -149,7 +158,9 @@ export default function Home() {
               </p>
               <div className="flex items-center text-indigo-600 font-medium">
                 Open Calculator
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <svg className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </div>
             </a>
             
@@ -169,7 +180,9 @@ export default function Home() {
               </p>
               <div className="flex items-center text-emerald-600 font-medium">
                 Order Survey
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <svg className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </div>
             </a>
             
@@ -189,7 +202,9 @@ export default function Home() {
               </p>
               <div className="flex items-center text-orange-600 font-medium">
                 Analyze ROI
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <svg className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </div>
             </a>
           </div>
@@ -197,7 +212,9 @@ export default function Home() {
           {/* Integration Notice */}
           <div className="mt-12 text-center">
             <div className="inline-flex items-center space-x-2 bg-indigo-50 text-indigo-700 px-6 py-3 rounded-full">
-              <Check className="w-5 h-5" />
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
               <span className="font-medium">All tools integrate seamlessly with your PPM dashboard</span>
             </div>
           </div>
@@ -221,14 +238,19 @@ export default function Home() {
             <div className="group">
               <div className="bg-white border border-gray-200 rounded-xl p-8 h-full hover:border-indigo-200 hover:shadow-lg transition-all">
                 <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-6">
-                  <Globe className="w-6 h-6 text-indigo-600" />
+                  <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Multi-Property Portfolio</h3>
                 <p className="text-gray-600 mb-4">
                   Manage unlimited properties across Puglia with detailed tracking of purchases, renovations, and valuations.
                 </p>
                 <Link href="/features/portfolio" className="text-indigo-600 font-medium inline-flex items-center group-hover:text-indigo-700">
-                  Learn more <ArrowRight className="ml-1 w-4 h-4" />
+                  Learn more 
+                  <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </Link>
               </div>
             </div>
@@ -237,14 +259,19 @@ export default function Home() {
             <div className="group">
               <div className="bg-white border border-gray-200 rounded-xl p-8 h-full hover:border-indigo-200 hover:shadow-lg transition-all">
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-6">
-                  <TrendingUp className="w-6 h-6 text-emerald-600" />
+                  <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Project & Budget Tracking</h3>
                 <p className="text-gray-600 mb-4">
                   Real-time project management with Gantt charts, budget tracking, and automatic expense categorization.
                 </p>
                 <Link href="/features/projects" className="text-indigo-600 font-medium inline-flex items-center group-hover:text-indigo-700">
-                  Learn more <ArrowRight className="ml-1 w-4 h-4" />
+                  Learn more 
+                  <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </Link>
               </div>
             </div>
@@ -253,14 +280,19 @@ export default function Home() {
             <div className="group">
               <div className="bg-white border border-gray-200 rounded-xl p-8 h-full hover:border-indigo-200 hover:shadow-lg transition-all">
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
-                  <Award className="w-6 h-6 text-purple-600" />
+                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                  </svg>
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Grant Management</h3>
                 <p className="text-gray-600 mb-4">
                   Track Mini PIA and other Italian grants with compliance monitoring and document requirements.
                 </p>
                 <Link href="/features/grants" className="text-indigo-600 font-medium inline-flex items-center group-hover:text-indigo-700">
-                  Learn more <ArrowRight className="ml-1 w-4 h-4" />
+                  Learn more 
+                  <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </Link>
               </div>
             </div>
@@ -269,14 +301,19 @@ export default function Home() {
             <div className="group">
               <div className="bg-white border border-gray-200 rounded-xl p-8 h-full hover:border-indigo-200 hover:shadow-lg transition-all">
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
-                  <Users className="w-6 h-6 text-blue-600" />
+                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Team Collaboration</h3>
                 <p className="text-gray-600 mb-4">
                   Invite architects, contractors, and property managers with role-based permissions and real-time updates.
                 </p>
                 <Link href="/features/team" className="text-indigo-600 font-medium inline-flex items-center group-hover:text-indigo-700">
-                  Learn more <ArrowRight className="ml-1 w-4 h-4" />
+                  Learn more 
+                  <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </Link>
               </div>
             </div>
@@ -285,14 +322,19 @@ export default function Home() {
             <div className="group">
               <div className="bg-white border border-gray-200 rounded-xl p-8 h-full hover:border-indigo-200 hover:shadow-lg transition-all">
                 <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-6">
-                  <Shield className="w-6 h-6 text-orange-600" />
+                  <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Document Vault</h3>
                 <p className="text-gray-600 mb-4">
                   Secure storage for contracts, permits, invoices with AI-powered categorization and search.
                 </p>
                 <Link href="/features/documents" className="text-indigo-600 font-medium inline-flex items-center group-hover:text-indigo-700">
-                  Learn more <ArrowRight className="ml-1 w-4 h-4" />
+                  Learn more 
+                  <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </Link>
               </div>
             </div>
@@ -301,14 +343,19 @@ export default function Home() {
             <div className="group">
               <div className="bg-white border border-gray-200 rounded-xl p-8 h-full hover:border-indigo-200 hover:shadow-lg transition-all">
                 <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-6">
-                  <Clock className="w-6 h-6 text-red-600" />
+                  <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Real-time Updates</h3>
                 <p className="text-gray-600 mb-4">
                   Live notifications, activity feeds, and presence indicators keep your team synchronized.
                 </p>
                 <Link href="/features/realtime" className="text-indigo-600 font-medium inline-flex items-center group-hover:text-indigo-700">
-                  Learn more <ArrowRight className="ml-1 w-4 h-4" />
+                  Learn more 
+                  <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </Link>
               </div>
             </div>
@@ -333,11 +380,9 @@ export default function Home() {
                 It's an essential tool for any serious investor in Italian real estate."
               </blockquote>
               <div className="flex items-center">
-                <img 
-                  src="/api/placeholder/56/56" 
-                  alt="Sarah Mitchell" 
-                  className="w-14 h-14 rounded-full bg-gray-200"
-                />
+                <div className="w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center">
+                  <span className="text-xl font-semibold text-gray-600">SM</span>
+                </div>
                 <div className="ml-4">
                   <div className="font-semibold text-gray-900">Sarah Mitchell</div>
                   <div className="text-gray-600">Property Investor, London</div>
@@ -363,7 +408,9 @@ export default function Home() {
               className="inline-flex items-center justify-center px-8 py-4 bg-white text-indigo-600 font-semibold rounded-lg hover:bg-gray-50 transition-all shadow-lg"
             >
               Start Your Free Trial
-              <ArrowRight className="ml-2 w-5 h-5" />
+              <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </Link>
             <Link 
               href="/contact"
