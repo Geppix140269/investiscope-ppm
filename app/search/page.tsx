@@ -216,7 +216,7 @@ export default function PropertySearchPage() {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-2xl font-light text-gray-900">Property Search</h1>
-              <p className="text-gray-600 mt-1">Track properties you're interested in</p>
+              <p className="text-gray-600 mt-1">                Track properties you&apos;re interested in</p>
             </div>
             <button
               onClick={() => setShowAddForm(true)}
