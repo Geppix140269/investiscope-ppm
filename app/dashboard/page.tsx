@@ -93,13 +93,13 @@ export default function DashboardPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Welcome to InvestiScope!</h1>
-          <p className="text-gray-600 mb-8">Choose how you'd like to use the platform:</p>
+          <p className="text-gray-600 mb-8">Choose how you&apos;d like to use the platform:</p>
           <div className="flex gap-4 justify-center">
             <button
               onClick={() => handleModeSwitch('buyer')}
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              I'm Looking to Buy
+              I&apos;m Looking to Buy
             </button>
             <button
               onClick={() => handleModeSwitch('owner')}
