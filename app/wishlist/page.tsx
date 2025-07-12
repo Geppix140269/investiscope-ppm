@@ -142,7 +142,7 @@ export default function WishlistPage() {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-2xl font-light text-gray-900">My Wishlist</h1>
-              <p className="text-gray-600 mt-1">Properties you're actively considering</p>
+              <p className="text-gray-600 mt-1">                Properties you&apos;re actively considering</p>
             </div>
             <div className="flex gap-3">
               {properties.length > 1 && (
@@ -337,7 +337,7 @@ export default function WishlistPage() {
                   {/* Notes */}
                   {property.notes && (
                     <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                      <p className="text-sm text-gray-700 italic">"{property.notes}"</p>
+                      <p className="text-sm text-gray-700 italic">&ldquo;{property.notes}&rdquo;</p>
                     </div>
                   )}
 
