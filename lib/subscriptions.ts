@@ -1,5 +1,7 @@
 // lib/subscription.ts
 
+import { useEffect, useState } from 'react'
+
 export type SubscriptionTier = 'free' | 'premium' | 'professional'
 
 export interface SubscriptionFeatures {
