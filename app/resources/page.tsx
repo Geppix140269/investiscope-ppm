@@ -95,7 +95,7 @@ const resources = [
   },
   {
     id: 8,
-    title: 'First-Time Buyer\'s Checklist',
+    title: 'First-Time Buyer&apos;s Checklist',
     description: 'Essential steps and considerations for first-time property buyers in Puglia, with timeline and cost breakdown.',
     category: 'buying',
     type: 'checklist',
