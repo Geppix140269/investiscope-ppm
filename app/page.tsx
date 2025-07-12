@@ -1,442 +1,454 @@
-'use client'
-
 import Link from 'next/link'
-import { ArrowRight, Check, Shield, Users, TrendingUp, Clock, Award, Globe } from 'lucide-react'
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section - Clean and Professional */}
-      <section className="relative overflow-hidden">
-        {/* Subtle gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-indigo-50"></div>
+    <div className="min-h-screen">
+      {/* Hero Section with Gradient Background */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-emerald-600 bg-[length:400%_400%] animate-gradient">
+        {/* Animated background elements */}
+        <div className="absolute -top-1/2 -right-1/2 w-[200%] h-[200%] opacity-10" 
+             style={{
+               background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)',
+               animation: 'shimmer 15s linear infinite'
+             }} />
         
-        {/* Professional grid pattern */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239CA3AF" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+        {/* Glass overlay for depth */}
+        <div className="absolute inset-0 bg-black/10"></div>
         
-        <div className="relative">
-          {/* Navigation Bar */}
-          <nav className="border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-            <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
-              <div className="flex justify-between items-center h-16">
-                <div className="flex items-center">
-                  <h1 className="text-2xl font-bold text-gray-900">InvestiScope PPM</h1>
-                </div>
-                <div className="hidden md:flex items-center space-x-8">
-                  <Link href="#features" className="text-gray-600 hover:text-gray-900 font-medium">Features</Link>
-                  <Link href="#pricing" className="text-gray-600 hover:text-gray-900 font-medium">Pricing</Link>
-                  <Link href="#about" className="text-gray-600 hover:text-gray-900 font-medium">About</Link>
-                  <Link href="/login" className="text-gray-600 hover:text-gray-900 font-medium">Sign In</Link>
-                  <Link href="/register" className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors">
-                    Get Started
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </nav>
-
-          {/* Hero Content */}
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-24 lg:py-32">
-            <div className="max-w-3xl">
-              {/* Trust Badge */}
-              <div className="inline-flex items-center space-x-2 bg-indigo-50 border border-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                <Shield className="w-4 h-4" />
-                <span>Trusted by 500+ Property Investors in Italy</span>
-              </div>
-              
-              {/* Main Heading */}
-              <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
-                Professional Property Management for{' '}
-                <span className="text-indigo-600">Puglia Investors</span>
-              </h1>
-              
-              {/* Subheading */}
-              <p className="text-xl text-gray-600 leading-relaxed mb-10 max-w-2xl">
-                Streamline your Italian property portfolio with enterprise-grade project management, 
-                real-time collaboration, and integrated grant tracking—designed specifically for international investors.
+        {/* Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-5 text-center">
+          {/* Glass Badge */}
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white px-6 py-3 rounded-full text-sm font-semibold mb-8 animate-fadeIn shadow-xl">
+            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+            PROPERTY PROJECT MANAGEMENT FOR PUGLIA
+          </div>
+          
+          {/* Main Title */}
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-light text-white mb-8 animate-fadeIn animation-delay-100 leading-tight">
+            Manage Your Italian<br />
+            <span className="font-bold bg-gradient-to-r from-emerald-300 to-teal-300 bg-clip-text text-transparent">
+              Property Projects
+            </span>
+          </h1>
+          
+          {/* Glass Card for Subtitle */}
+          <div className="max-w-4xl mx-auto mb-10 animate-fadeIn animation-delay-200">
+            <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-8 shadow-2xl">
+              <p className="text-xl md:text-2xl text-white font-medium mb-3">
+                Professional PPM Platform for International Investors
               </p>
-              
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 mb-10">
-                <Link 
-                  href="/register"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
-                >
-                  Start Free 14-Day Trial
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Link>
-                <Link 
-                  href="/demo"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-white text-gray-900 font-semibold rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all"
-                >
-                  Watch Demo
-                  <span className="ml-2 text-gray-400">3 min</span>
-                </Link>
-              </div>
-              
-              {/* Trust Indicators */}
-              <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600">
-                <div className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-2" />
-                  <span>No credit card required</span>
+              <p className="text-lg md:text-xl text-white/90 font-light">
+                Track properties, manage renovations, collaborate with teams, and maximize your Puglia grants—all in one place
+              </p>
+            </div>
+          </div>
+          
+          {/* Glass Benefits Cards */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 animate-fadeIn animation-delay-300">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 rounded-2xl text-white font-medium text-sm hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1">
+              ✓ Property Portfolio
+            </div>
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 rounded-2xl text-white font-medium text-sm hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1">
+              ✓ Project Tracking
+            </div>
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 rounded-2xl text-white font-medium text-sm hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1">
+              ✓ Team Collaboration
+            </div>
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 rounded-2xl text-white font-medium text-sm hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1">
+              ✓ Grant Integration
+            </div>
+          </div>
+          
+          {/* Glass CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-5 justify-center animate-fadeIn animation-delay-400">
+            <Link 
+              href="/register"
+              className="bg-white/90 backdrop-blur-md text-indigo-700 px-8 py-5 rounded-full font-bold hover:bg-white hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 text-lg border border-white/50"
+            >
+              Start Free Trial
+            </Link>
+            <Link 
+              href="/login"
+              className="group inline-flex items-center gap-3 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white px-8 py-5 rounded-full text-lg font-bold hover:bg-white/20 hover:border-white/50 transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
+              Sign In
+              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+          
+          {/* Glass Stats Card */}
+          <div className="mt-16 animate-fadeIn animation-delay-500">
+            <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-6 inline-block shadow-xl">
+              <div className="flex flex-wrap justify-center items-center gap-8 text-white">
+                <div>
+                  <p className="text-3xl font-bold">€2.5M+</p>
+                  <p className="text-sm opacity-80">Grants Tracked</p>
                 </div>
-                <div className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-2" />
-                  <span>GDPR compliant</span>
+                <div className="w-px h-12 bg-white/30"></div>
+                <div>
+                  <p className="text-3xl font-bold">150+</p>
+                  <p className="text-sm opacity-80">Active Projects</p>
                 </div>
-                <div className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-2" />
-                  <span>Cancel anytime</span>
+                <div className="w-px h-12 bg-white/30"></div>
+                <div>
+                  <p className="text-3xl font-bold">98%</p>
+                  <p className="text-sm opacity-80">Success Rate</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Social Proof Section */}
-      <section className="py-12 border-y border-gray-100 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900">€45M+</div>
-              <div className="text-sm text-gray-600 mt-1">Property Value Managed</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900">2,500+</div>
-              <div className="text-sm text-gray-600 mt-1">Active Projects</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900">€3.2M</div>
-              <div className="text-sm text-gray-600 mt-1">Grants Tracked</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900">98%</div>
-              <div className="text-sm text-gray-600 mt-1">Customer Satisfaction</div>
-            </div>
+        
+        {/* Scroll indicator with glass effect */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-full">
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
           </div>
         </div>
       </section>
 
-      {/* Integration Tools Section */}
-      <section className="py-20 bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
+      {/* Features Section with Glass Cards */}
+      <section className="py-20 bg-gradient-to-br from-gray-50 via-white to-indigo-50 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-200/30 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-200/30 rounded-full blur-3xl"></div>
+        
+        <div className="max-w-7xl mx-auto px-5 relative z-10">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center space-x-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <span>🔗</span>
-              <span>INTEGRATED TOOLS</span>
+            <div className="inline-block bg-gradient-to-r from-indigo-600 to-emerald-600 text-white px-6 py-2 rounded-full text-sm font-semibold mb-4 shadow-lg">
+              POWERFUL FEATURES
             </div>
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Complete Investment Suite at Your Fingertips
+            <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-4">
+              Everything You Need to <strong className="font-bold">Succeed</strong>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Access our full range of property investment tools directly from your dashboard
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {/* Grant Calculator */}
-            <a 
-              href="https://investiscopeeasy.netlify.app/app.html"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group bg-white rounded-2xl shadow-sm border border-gray-200 p-8 hover:shadow-xl hover:border-indigo-200 transition-all transform hover:-translate-y-1"
-            >
-              <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <span className="text-2xl">🧮</span>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Grant Calculator</h3>
-              <p className="text-gray-600 mb-4">
-                Calculate Mini PIA grants up to €2.25M instantly. Check eligibility and estimate funding for your Puglia projects.
-              </p>
-              <div className="flex items-center text-indigo-600 font-medium">
-                Open Calculator
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </a>
-            
-            {/* Property Survey */}
-            <a 
-              href="https://investiscope-nextjs.netlify.app/surveys"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group bg-white rounded-2xl shadow-sm border border-gray-200 p-8 hover:shadow-xl hover:border-indigo-200 transition-all transform hover:-translate-y-1"
-            >
-              <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <span className="text-2xl">🔍</span>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Property Survey</h3>
-              <p className="text-gray-600 mb-4">
-                Order professional property surveys and technical assessments. Essential for grant applications and renovations.
-              </p>
-              <div className="flex items-center text-emerald-600 font-medium">
-                Order Survey
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </a>
-            
-            {/* ROI Analysis */}
-            <a 
-              href="https://investiscope-nextjs.netlify.app/classic/register"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group bg-white rounded-2xl shadow-sm border border-gray-200 p-8 hover:shadow-xl hover:border-indigo-200 transition-all transform hover:-translate-y-1"
-            >
-              <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <span className="text-2xl">📊</span>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">ROI Analysis</h3>
-              <p className="text-gray-600 mb-4">
-                Advanced ROI projections and investment analysis. Model different scenarios and optimize your returns.
-              </p>
-              <div className="flex items-center text-orange-600 font-medium">
-                Analyze ROI
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </a>
-          </div>
-          
-          {/* Integration Notice */}
-          <div className="mt-12 text-center">
-            <div className="inline-flex items-center space-x-2 bg-indigo-50 text-indigo-700 px-6 py-3 rounded-full">
-              <Check className="w-5 h-5" />
-              <span className="font-medium">All tools integrate seamlessly with your PPM dashboard</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section id="features" className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Everything You Need to Manage Properties in Italy
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Purpose-built for international investors navigating Italian property regulations, grants, and renovations
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Built specifically for international property investors in Puglia
             </p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <div className="group">
-              <div className="bg-white border border-gray-200 rounded-xl p-8 h-full hover:border-indigo-200 hover:shadow-lg transition-all">
-                <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-6">
-                  <Globe className="w-6 h-6 text-indigo-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Multi-Property Portfolio</h3>
-                <p className="text-gray-600 mb-4">
-                  Manage unlimited properties across Puglia with detailed tracking of purchases, renovations, and valuations.
-                </p>
-                <Link href="/features/portfolio" className="text-indigo-600 font-medium inline-flex items-center group-hover:text-indigo-700">
-                  Learn more <ArrowRight className="ml-1 w-4 h-4" />
-                </Link>
+            <div className="bg-white/70 backdrop-blur-md rounded-3xl p-8 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-white/50">
+              <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
               </div>
+              <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Property Portfolio</h3>
+              <p className="text-gray-700">
+                Track all your Puglia properties with detailed information, documents, and financial data in one place
+              </p>
             </div>
-
-            {/* Feature 2 */}
-            <div className="group">
-              <div className="bg-white border border-gray-200 rounded-xl p-8 h-full hover:border-indigo-200 hover:shadow-lg transition-all">
-                <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-6">
-                  <TrendingUp className="w-6 h-6 text-emerald-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Project & Budget Tracking</h3>
-                <p className="text-gray-600 mb-4">
-                  Real-time project management with Gantt charts, budget tracking, and automatic expense categorization.
-                </p>
-                <Link href="/features/projects" className="text-indigo-600 font-medium inline-flex items-center group-hover:text-indigo-700">
-                  Learn more <ArrowRight className="ml-1 w-4 h-4" />
-                </Link>
+            
+            <div className="bg-white/70 backdrop-blur-md rounded-3xl p-8 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-white/50">
+              <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mb-6">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
               </div>
+              <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Project Management</h3>
+              <p className="text-gray-700">
+                Manage renovations with timelines, budgets, tasks, and milestones. Track Mini PIA grant progress
+              </p>
             </div>
-
-            {/* Feature 3 */}
-            <div className="group">
-              <div className="bg-white border border-gray-200 rounded-xl p-8 h-full hover:border-indigo-200 hover:shadow-lg transition-all">
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
-                  <Award className="w-6 h-6 text-purple-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Grant Management</h3>
-                <p className="text-gray-600 mb-4">
-                  Track Mini PIA and other Italian grants with compliance monitoring and document requirements.
-                </p>
-                <Link href="/features/grants" className="text-indigo-600 font-medium inline-flex items-center group-hover:text-indigo-700">
-                  Learn more <ArrowRight className="ml-1 w-4 h-4" />
-                </Link>
+            
+            <div className="bg-white/70 backdrop-blur-md rounded-3xl p-8 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-white/50">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
               </div>
+              <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Team Collaboration</h3>
+              <p className="text-gray-700">
+                Invite architects, contractors, and property managers. Assign tasks and track progress together
+              </p>
             </div>
-
-            {/* Feature 4 */}
-            <div className="group">
-              <div className="bg-white border border-gray-200 rounded-xl p-8 h-full hover:border-indigo-200 hover:shadow-lg transition-all">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
-                  <Users className="w-6 h-6 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Team Collaboration</h3>
-                <p className="text-gray-600 mb-4">
-                  Invite architects, contractors, and property managers with role-based permissions and real-time updates.
-                </p>
-                <Link href="/features/team" className="text-indigo-600 font-medium inline-flex items-center group-hover:text-indigo-700">
-                  Learn more <ArrowRight className="ml-1 w-4 h-4" />
-                </Link>
+            
+            <div className="bg-white/70 backdrop-blur-md rounded-3xl p-8 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-white/50">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-6">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
               </div>
+              <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Document Management</h3>
+              <p className="text-gray-700">
+                Store contracts, permits, invoices, and photos. Access your documents anytime, anywhere
+              </p>
             </div>
-
-            {/* Feature 5 */}
-            <div className="group">
-              <div className="bg-white border border-gray-200 rounded-xl p-8 h-full hover:border-indigo-200 hover:shadow-lg transition-all">
-                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-6">
-                  <Shield className="w-6 h-6 text-orange-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Document Vault</h3>
-                <p className="text-gray-600 mb-4">
-                  Secure storage for contracts, permits, invoices with AI-powered categorization and search.
-                </p>
-                <Link href="/features/documents" className="text-indigo-600 font-medium inline-flex items-center group-hover:text-indigo-700">
-                  Learn more <ArrowRight className="ml-1 w-4 h-4" />
-                </Link>
+            
+            <div className="bg-white/70 backdrop-blur-md rounded-3xl p-8 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-white/50">
+              <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl flex items-center justify-center mb-6">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
               </div>
+              <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent">Financial Tracking</h3>
+              <p className="text-gray-700">
+                Monitor budgets, expenses, and ROI. Track grant applications and disbursements
+              </p>
             </div>
-
-            {/* Feature 6 */}
-            <div className="group">
-              <div className="bg-white border border-gray-200 rounded-xl p-8 h-full hover:border-indigo-200 hover:shadow-lg transition-all">
-                <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-6">
-                  <Clock className="w-6 h-6 text-red-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Real-time Updates</h3>
-                <p className="text-gray-600 mb-4">
-                  Live notifications, activity feeds, and presence indicators keep your team synchronized.
-                </p>
-                <Link href="/features/realtime" className="text-indigo-600 font-medium inline-flex items-center group-hover:text-indigo-700">
-                  Learn more <ArrowRight className="ml-1 w-4 h-4" />
-                </Link>
+            
+            <div className="bg-white/70 backdrop-blur-md rounded-3xl p-8 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-white/50">
+              <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl flex items-center justify-center mb-6">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
               </div>
+              <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-red-600 to-rose-600 bg-clip-text text-transparent">Grant Calculator</h3>
+              <p className="text-gray-700">
+                Built-in Mini PIA grant calculator. Check eligibility and track application status
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Testimonial Section */}
-      <section className="py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 lg:p-12">
-              <div className="flex items-start space-x-1 mb-6">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
+      {/* Integration Section */}
+      <section className="py-20 bg-gradient-to-br from-indigo-900 via-purple-900 to-emerald-900 text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_70%_70%,rgba(255,255,255,0.1)_0%,transparent_70%)]"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-5 relative z-10">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white px-5 py-2 rounded-full text-sm font-semibold mb-6">
+              🔗 SEAMLESS INTEGRATION
+            </div>
+            <h2 className="text-3xl md:text-5xl font-light text-white mb-4">
+              Part of the <strong className="font-bold">InvestiScope Suite</strong>
+            </h2>
+            <p className="text-xl text-white/80 max-w-3xl mx-auto">
+              PPM integrates perfectly with our grant calculators and investment tools
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 hover:bg-white/15 hover:-translate-y-2 transition-all text-center">
+              <div className="text-4xl mb-4 filter drop-shadow-lg">🧮</div>
+              <h3 className="text-xl font-bold mb-3 text-emerald-400">Grant Calculator</h3>
+              <p className="text-gray-300 mb-4">
+                Calculate Mini PIA grants up to €2.25M directly within your project
+              </p>
+              <Link href="https://investiscope.net/calculator" className="text-emerald-400 hover:text-emerald-300 font-medium">
+                Learn More →
+              </Link>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 hover:bg-white/15 hover:-translate-y-2 transition-all text-center">
+              <div className="text-4xl mb-4 filter drop-shadow-lg">🔍</div>
+              <h3 className="text-xl font-bold mb-3 text-cyan-400">Property Survey</h3>
+              <p className="text-gray-300 mb-4">
+                Order professional property surveys and store reports in your project
+              </p>
+              <Link href="https://investiscope.net/surveys" className="text-cyan-400 hover:text-cyan-300 font-medium">
+                Learn More →
+              </Link>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 hover:bg-white/15 hover:-translate-y-2 transition-all text-center">
+              <div className="text-4xl mb-4 filter drop-shadow-lg">📊</div>
+              <h3 className="text-xl font-bold mb-3 text-orange-400">ROI Analysis</h3>
+              <p className="text-gray-300 mb-4">
+                Advanced ROI projections integrated with your actual project data
+              </p>
+              <Link href="https://investiscope.net/tools" className="text-orange-400 hover:text-orange-300 font-medium">
+                Learn More →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="py-20 bg-gradient-to-br from-white via-gray-50 to-indigo-50 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-indigo-200/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-emerald-200/20 rounded-full blur-3xl"></div>
+        
+        <div className="max-w-6xl mx-auto px-5 relative z-10">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-emerald-600 text-white px-5 py-2 rounded-full text-sm font-semibold mb-6 shadow-lg">
+              💎 SIMPLE PRICING
+            </div>
+            <h2 className="text-3xl md:text-5xl font-light text-gray-900 mb-4">
+              Choose Your <strong className="font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 bg-clip-text text-transparent">Plan</strong>
+            </h2>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div className="bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl p-8 hover:-translate-y-2 transition-all border border-white/50">
+              <h3 className="text-2xl font-bold mb-2">Free Trial</h3>
+              <p className="text-gray-600 mb-6">Perfect for getting started</p>
+              <div className="text-5xl font-bold text-gray-900 mb-6">€0</div>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center gap-2">
+                  <span className="text-emerald-500">✓</span>
+                  <span>1 Property</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-emerald-500">✓</span>
+                  <span>2 Active Projects</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-emerald-500">✓</span>
+                  <span>Basic Features</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-emerald-500">✓</span>
+                  <span>14-Day Trial</span>
+                </li>
+              </ul>
+              <Link href="/register" className="block w-full bg-gray-900 text-white text-center py-4 rounded-xl font-bold hover:bg-gray-800 transition-colors">
+                Start Free Trial
+              </Link>
+            </div>
+            
+            <div className="bg-gradient-to-br from-indigo-100 to-emerald-100 rounded-3xl shadow-xl p-8 hover:-translate-y-2 transition-all relative border-2 border-indigo-500">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-indigo-600 to-emerald-600 text-white px-6 py-2 rounded-full text-sm font-bold">
+                MOST POPULAR
               </div>
-              <blockquote className="text-2xl font-medium text-gray-900 mb-6">
-                "InvestiScope PPM transformed how we manage our Puglia properties. The grant tracking alone saved us €120,000 in missed opportunities. 
-                It's an essential tool for any serious investor in Italian real estate."
-              </blockquote>
-              <div className="flex items-center">
-                <div className="w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center">
-                  <span className="text-xl font-semibold text-gray-600">SM</span>
-                </div>
-                <div className="ml-4">
-                  <div className="font-semibold text-gray-900">Sarah Mitchell</div>
-                  <div className="text-gray-600">Property Investor, London</div>
-                </div>
-              </div>
+              <h3 className="text-2xl font-bold mb-2">Professional</h3>
+              <p className="text-gray-600 mb-6">For serious investors</p>
+              <div className="text-5xl font-bold text-gray-900 mb-6">€49<span className="text-lg font-normal text-gray-600">/month</span></div>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center gap-2">
+                  <span className="text-emerald-500">✓</span>
+                  <span>Unlimited Properties</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-emerald-500">✓</span>
+                  <span>Unlimited Projects</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-emerald-500">✓</span>
+                  <span>Team Collaboration</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-emerald-500">✓</span>
+                  <span>Grant Integration</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-emerald-500">✓</span>
+                  <span>Priority Support</span>
+                </li>
+              </ul>
+              <Link href="/register" className="block w-full bg-gradient-to-r from-indigo-600 to-emerald-600 text-white text-center py-4 rounded-xl font-bold hover:shadow-xl transition-all">
+                Start Professional
+              </Link>
+            </div>
+            
+            <div className="bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl p-8 hover:-translate-y-2 transition-all border border-white/50">
+              <h3 className="text-2xl font-bold mb-2">Enterprise</h3>
+              <p className="text-gray-600 mb-6">For teams &amp; agencies</p>
+              <div className="text-5xl font-bold text-gray-900 mb-6">€199<span className="text-lg font-normal text-gray-600">/month</span></div>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center gap-2">
+                  <span className="text-emerald-500">✓</span>
+                  <span>Everything in Pro</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-emerald-500">✓</span>
+                  <span>White Label Option</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-emerald-500">✓</span>
+                  <span>API Access</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-emerald-500">✓</span>
+                  <span>Custom Integrations</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-emerald-500">✓</span>
+                  <span>Dedicated Support</span>
+                </li>
+              </ul>
+              <Link href="/contact" className="block w-full bg-gray-900 text-white text-center py-4 rounded-xl font-bold hover:bg-gray-800 transition-colors">
+                Contact Sales
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-indigo-600">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
-            Ready to Transform Your Property Management?
-          </h2>
-          <p className="text-xl text-indigo-100 mb-10 max-w-2xl mx-auto">
-            Join hundreds of international investors who trust InvestiScope PPM for their Italian property portfolios.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link 
-              href="/register"
-              className="inline-flex items-center justify-center px-8 py-4 bg-white text-indigo-600 font-semibold rounded-lg hover:bg-gray-50 transition-all shadow-lg"
-            >
-              Start Your Free Trial
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Link>
-            <Link 
-              href="/contact"
-              className="inline-flex items-center justify-center px-8 py-4 bg-indigo-500 text-white font-semibold rounded-lg hover:bg-indigo-400 transition-all"
-            >
-              Talk to Sales
-            </Link>
+      <section className="py-20 bg-gradient-to-br from-indigo-600 via-purple-600 to-emerald-600 text-white relative overflow-hidden animate-gradient bg-[length:400%_400%]">
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="max-w-4xl mx-auto px-5 text-center relative z-10">
+          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-12 border border-white/20 shadow-2xl">
+            <h2 className="text-3xl md:text-5xl font-light mb-6">
+              Ready to Transform Your <strong className="font-bold">Property Management?</strong>
+            </h2>
+            <p className="text-xl mb-10 text-white/90">
+              Join international investors who trust InvestiScope PPM for their Puglia projects
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <Link 
+                href="/register"
+                className="text-lg px-10 py-5 bg-white text-indigo-700 hover:bg-gray-100 rounded-full font-bold shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all"
+              >
+                Start 14-Day Free Trial
+              </Link>
+              <Link 
+                href="/demo"
+                className="text-lg px-10 py-5 bg-transparent border-2 border-white text-white hover:bg-white hover:text-indigo-700 rounded-full font-bold shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all"
+              >
+                Request Demo
+              </Link>
+            </div>
+            
+            <p className="mt-8 text-sm text-white/70">
+              No credit card required • Free trial includes all features
+            </p>
           </div>
-          <p className="mt-8 text-indigo-200">
-            Free 14-day trial • No credit card required • Cancel anytime
-          </p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-12">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <footer className="bg-gray-900 text-gray-400 py-12">
+        <div className="max-w-7xl mx-auto px-5">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Product</h3>
-              <ul className="space-y-3 text-gray-600">
-                <li><Link href="/features" className="hover:text-gray-900">Features</Link></li>
-                <li><Link href="/pricing" className="hover:text-gray-900">Pricing</Link></li>
-                <li><Link href="/integrations" className="hover:text-gray-900">Integrations</Link></li>
-                <li><Link href="/changelog" className="hover:text-gray-900">Changelog</Link></li>
+              <h3 className="text-white font-semibold mb-4">InvestiScope PPM</h3>
+              <p className="text-sm">Property project management designed for international investors in Puglia, Italy.</p>
+              <p className="text-xs mt-4">Part of the InvestiScope Suite</p>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-4">Product</h4>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/features" className="hover:text-white transition-colors">Features</Link></li>
+                <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
+                <li><Link href="/integrations" className="hover:text-white transition-colors">Integrations</Link></li>
+                <li><Link href="/api" className="hover:text-white transition-colors">API</Link></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Company</h3>
-              <ul className="space-y-3 text-gray-600">
-                <li><Link href="/about" className="hover:text-gray-900">About</Link></li>
-                <li><Link href="/blog" className="hover:text-gray-900">Blog</Link></li>
-                <li><Link href="/careers" className="hover:text-gray-900">Careers</Link></li>
-                <li><Link href="/contact" className="hover:text-gray-900">Contact</Link></li>
+              <h4 className="text-white font-semibold mb-4">Resources</h4>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/guides" className="hover:text-white transition-colors">User Guides</Link></li>
+                <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
+                <li><Link href="/support" className="hover:text-white transition-colors">Support</Link></li>
+                <li><a href="https://investiscope.net" className="hover:text-white transition-colors">InvestiScope Main</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Resources</h3>
-              <ul className="space-y-3 text-gray-600">
-                <li><Link href="/docs" className="hover:text-gray-900">Documentation</Link></li>
-                <li><Link href="/guides" className="hover:text-gray-900">Guides</Link></li>
-                <li><Link href="/webinars" className="hover:text-gray-900">Webinars</Link></li>
-                <li><Link href="/support" className="hover:text-gray-900">Support</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Legal</h3>
-              <ul className="space-y-3 text-gray-600">
-                <li><Link href="/privacy" className="hover:text-gray-900">Privacy</Link></li>
-                <li><Link href="/terms" className="hover:text-gray-900">Terms</Link></li>
-                <li><Link href="/security" className="hover:text-gray-900">Security</Link></li>
-                <li><Link href="/gdpr" className="hover:text-gray-900">GDPR</Link></li>
+              <h4 className="text-white font-semibold mb-4">Company</h4>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/about" className="hover:text-white transition-colors">About</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+                <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-100 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <div className="text-gray-600">
-              © 2025 InvestiScope PPM. All rights reserved.
-            </div>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link href="https://twitter.com/investiscope" className="text-gray-400 hover:text-gray-600">
-                <span className="sr-only">Twitter</span>
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
-                </svg>
-              </Link>
-              <Link href="https://linkedin.com/company/investiscope" className="text-gray-400 hover:text-gray-600">
-                <span className="sr-only">LinkedIn</span>
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                </svg>
-              </Link>
-            </div>
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
+            <p>&copy; 2025 InvestiScope PPM. All rights reserved.</p>
           </div>
         </div>
       </footer>
