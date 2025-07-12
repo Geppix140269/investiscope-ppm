@@ -1,20 +1,32 @@
+// File: next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['localhost', 'investiscope.net'],
+    domains: ['localhost', 'investiscope.net', 'images.unsplash.com'],
   },
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false, // Change to false to catch errors
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false, // Change to false to catch errors
   },
-  // Disable static optimization for problematic pages
   experimental: {
     appDir: true,
   },
-  // Increase timeout for static generation
-  staticPageGenerationTimeout: 120,
+  // PWA headers
+  async headers() {
+    return [
+      {
+        source: '/service-worker.js',
+        headers: [
+          {
+            key: 'Service-Worker-Allowed',
+            value: '/',
+          },
+        ],
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig
