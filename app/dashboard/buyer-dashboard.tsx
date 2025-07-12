@@ -1,3 +1,5 @@
+// File: app/dashboard/buyer-dashboard.tsx
+
 'use client'
 
 import { useState } from 'react'
