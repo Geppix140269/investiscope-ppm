@@ -1,3 +1,6 @@
+// File: app/page.tsx
+'use client'
+
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, CheckCircle, Globe, Shield, Users, FileText, Calculator, Search, Star, ArrowRight, Menu, X, Phone, Mail, MapPin, Building2, Briefcase, Home, TrendingUp, Clock, Award, ChevronDown } from 'lucide-react';
 
