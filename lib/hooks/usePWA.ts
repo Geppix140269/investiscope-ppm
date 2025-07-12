@@ -1,4 +1,4 @@
-// lib/hooks/usePWA.ts
+// File: lib/hooks/usePWA.ts
 import { useState, useEffect } from 'react'
 
 interface BeforeInstallPromptEvent extends Event {
@@ -13,6 +13,9 @@ export function usePWA() {
   const [isOnline, setIsOnline] = useState(true)
 
   useEffect(() => {
+    // Only run in browser
+    if (typeof window === 'undefined') return
+
     // Check if already installed
     if (window.matchMedia('(display-mode: standalone)').matches) {
       setIsInstalled(true)
@@ -20,8 +23,12 @@ export function usePWA() {
 
     // Check online status
     setIsOnline(navigator.onLine)
-    window.addEventListener('online', () => setIsOnline(true))
-    window.addEventListener('offline', () => setIsOnline(false))
+    
+    const handleOnline = () => setIsOnline(true)
+    const handleOffline = () => setIsOnline(false)
+    
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
 
     // Listen for install prompt
     const handleBeforeInstallPrompt = (e: Event) => {
@@ -46,8 +53,8 @@ export function usePWA() {
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
-      window.removeEventListener('online', () => setIsOnline(true))
-      window.removeEventListener('offline', () => setIsOnline(false))
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
     }
   }, [])
 
