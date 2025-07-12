@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Search, Heart, FileText, Calculator, Users, TrendingUp, Globe, AlertCircle, BookOpen, ChevronRight, Home, MapPin, Euro } from 'lucide-react'
+import { Search, Heart, FileText, Calculator, Users, TrendingUp, Globe, AlertCircle, BookOpen, ChevronRight, Home, MapPin, Euro, CheckCircle } from 'lucide-react'
 
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null)
@@ -29,23 +29,9 @@ export default function DashboardPage() {
       
       setUser(user)
       
-      // Fetch user profile to check if they own properties
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single()
-      
-      setUserProfile(profile)
-      
-      // Fetch saved properties (wishlist)
-      const { data: wishlist } = await supabase
-        .from('property_wishlist')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-      
-      setSavedProperties(wishlist || [])
+      // For now, just set empty data since these tables might not exist yet
+      setUserProfile({})
+      setSavedProperties([])
       
     } catch (error) {
       console.error('Dashboard error:', error)
@@ -271,21 +257,6 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-
-        {/* Success Message for New Users */}
-        {userProfile?.is_new && (
-          <div className="mt-8 bg-green-50 border border-green-200 rounded-lg p-6">
-            <div className="flex items-start">
-              <CheckCircle className="w-6 h-6 text-green-600 mt-1 mr-3" />
-              <div>
-                <h3 className="font-semibold text-green-900">Welcome to InvestiScope!</h3>
-                <p className="text-green-700 mt-1">
-                  Your account is all set up. Start by searching for properties or reading our buying guide to understand the process.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   )
