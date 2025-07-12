@@ -277,7 +277,7 @@ export default function HomePage() {
               >
                 <div className="bg-gray-50 p-12">
                   <p className="text-xl leading-relaxed mb-8 italic">
-                    "{testimonial.text}"
+                    &ldquo;{testimonial.text}&rdquo;
                   </p>
                   <div className="flex items-center justify-between">
                     <div>
